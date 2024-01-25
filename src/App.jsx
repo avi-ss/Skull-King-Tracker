@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SetupGame from './pages/SetupGame';
 import Game from './pages/Game';
-import { Center } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { GameProvider } from './context/GameContext';
 
 function App() {
@@ -12,14 +12,14 @@ function App() {
   };
 
   return (
-    <Center>
+    <Box padding={6}>
       <GameProvider>
         {!gameStarted ?
           <SetupGame onSetupEnd={startGame} /> :
           <Game />
         }
       </GameProvider>
-    </Center>
+    </Box>
   );
 }
 

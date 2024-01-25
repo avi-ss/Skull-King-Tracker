@@ -12,9 +12,9 @@ function SelectTricks({ onBack, onNext }) {
         setTricksPerRound(updatedTricks);
     }, [numRounds]);
 
-    const handleInputChange = (value, index) => {
+    const handleInputChange = (_, index, valueAsNumber,) => {
         const updatedTricks = [...tricksPerRound];
-        updatedTricks[index] = value;
+        updatedTricks[index] = valueAsNumber;
         setTricksPerRound(updatedTricks);
     };
 
@@ -24,7 +24,7 @@ function SelectTricks({ onBack, onNext }) {
                 <Card size='sm' key={index}>
                     <CardBody>
                         <Text mb='1' align='left'>
-                            <b>Ronda {index}</b>
+                            <b>Ronda {index + 1}</b>
                         </Text>
                         <RoundInput
                             index={index}
