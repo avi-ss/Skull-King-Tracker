@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect, useDisclosure } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGameContext } from '../context/GameContext';
 import { Button, Heading, Tag, Stack, HStack } from '@chakra-ui/react';
 import { InfoIcon } from '@chakra-ui/icons';
@@ -15,6 +14,16 @@ import {
 } from '@chakra-ui/react'
 
 import {
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+    AlertDialogCloseButton,
+} from '@chakra-ui/react'
+
+import {
     Table,
     Thead,
     Tbody,
@@ -27,12 +36,17 @@ import {
 import { assignColors } from '../utils/colors';
 import PlayerCard from '../components/PlayerCard';
 
-function Game() {
+function Game({ onRoundChange, onGameExit }) {
     const { playerNames, tricksPerRound, numRounds } = useGameContext();
     const [isLeaderboardOpen, setLeaderboardOpen] = useState(false);
     const [currentRound, setCurrentRound] = useState(0);
     const [avatarColors, setAvatarColors] = useState([]);
     const [playerScores, setPlayerScores] = useState([]);
+    const [isGameFinished, setGameFinished] = useState(false);
+
+    const [isAlertOpen, setAlertOpen] = useState(false);
+    const [alertHeaderText, setAlertHeaderText] = useState('')
+    const [alertBodyText, setAlertBodyText] = useState('')
 
     useEffect(() => {
         const initialScores = playerNames.map(name => ({
@@ -52,6 +66,10 @@ function Game() {
         setAvatarColors(assignColors(numRounds));
         setPlayerScores(initialScores);
     }, [playerNames, numRounds]);
+
+    useEffect(() => {
+        onRoundChange(); // Llamamos al padre
+    }, [currentRound])
 
     const changeBid = (_, index, valueAsNumber) => {
         setPlayerScores(prevScores => {
@@ -103,10 +121,10 @@ function Game() {
         });
     }
 
-    const getAdditionalPoints = (index) => (_) => {
+    const getAdditionalPoints = (index, points) => (_) => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
-            newScores[index].roundScores[currentRound].additionalPoints += 10;
+            newScores[index].roundScores[currentRound].additionalPoints += points;
             return newScores;
         });
     }
@@ -155,12 +173,19 @@ function Game() {
 
     const previousRound = () => {
         if (currentRound > 0) {
-            setCurrentRound(currentRound - 1);
+            setAlertHeaderText('Aviso de progreso');
+            setAlertBodyText('¿Estás seguro de que quieres volver atrás? Esto eliminará el progreso de la última ronda jugada.');
+            setAlertOpen(true);
+        }
+        else {
+            setAlertHeaderText('Salir de la partida');
+            setAlertBodyText('¿Estás seguro de que quieres salir de la partida? Volverás al menú de selección.');
+            setAlertOpen(true);
         }
     }
 
     const nextRound = () => {
-        if (currentRound + 1 < numRounds) {
+        if (!isGameFinished) {
             setPlayerScores(prevScores => {
                 const newFinalScores = [...prevScores];
                 newFinalScores.forEach((_, index) => {
@@ -168,10 +193,26 @@ function Game() {
                 })
                 return newFinalScores;
             });
+        }
+
+        if (currentRound + 1 < numRounds) {
             setCurrentRound(currentRound + 1);
         }
         else {
-            console.log("Se acabó el juego");
+            setGameFinished(true);
+            setLeaderboardOpen(true);
+        }
+    }
+
+    const confirmAlert = () => {
+        setAlertOpen(false);
+
+        if (currentRound > 0) {
+            // TODO: Resetear valores de la ultima ronda
+            setCurrentRound(currentRound - 1);
+        }
+        else {
+            onGameExit(); // Llamamos al padre
         }
     }
 
@@ -227,13 +268,46 @@ function Game() {
                             </Table>
                         </TableContainer>
                     </ModalBody>
-                    <ModalFooter>
+                    <ModalFooter flexDirection='column' alignItems='stretch'>
                         <Button colorScheme='blue' onClick={() => setLeaderboardOpen(false)}>
                             Cerrar
                         </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+        )
+    }
+
+    const renderPreviousRoundAlert = () => {
+        const cancelRef = React.useRef()
+
+        return (
+            <AlertDialog
+                isOpen={isAlertOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={() => setAlertOpen(false)}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            {alertHeaderText}
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            {alertBodyText}
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={() => setAlertOpen(false)}>
+                                Cancelar
+                            </Button>
+                            <Button colorScheme='red' onClick={confirmAlert} ml={3}>
+                                Confirmar
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         )
     }
 
@@ -258,6 +332,7 @@ function Game() {
                 </Stack>
             </Stack>
             {renderLeaderboardModal()}
+            {renderPreviousRoundAlert()}
         </>
     );
 }

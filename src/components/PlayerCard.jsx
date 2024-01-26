@@ -2,7 +2,7 @@ import React from 'react';
 
 import RoundInput from '../components/RoundInput';
 import { Avatar, Badge, ButtonGroup, IconButton, Button, Card, CardHeader, CardBody, Heading, Tag, Text, Stack, HStack } from '@chakra-ui/react';
-import { GiPirateCaptain, GiPirateFlag, GiMermaid } from "react-icons/gi";
+import { GiPirateCaptain, GiPirateFlag, GiMermaid, GiOpenTreasureChest } from "react-icons/gi";
 import { RepeatIcon } from '@chakra-ui/icons';
 
 const ICON_SIZE = '26px';
@@ -28,8 +28,8 @@ function PlayerCard({ name, index, points, avatarColor, currentResults, maxTrick
         if (skullKing > 0) {
             badges.push(<Badge key="skullKing" colorScheme="blue">{skullKing === 1 ? 'SKULL K' : `${skullKing} SKULL K`}</Badge>);
         }
-        if (additionalPoints > 0) {
-            badges.push(<Badge key="points" colorScheme="purple">{additionalPoints} puntos</Badge>);
+        if (Math.abs(additionalPoints) > 0) {
+            badges.push(<Badge key="points" colorScheme="purple" variant={additionalPoints < 0 ? 'outline' : 'subtle'}>{additionalPoints} puntos</Badge>);
         }
 
         return <HStack>{badges}</HStack>;
@@ -43,6 +43,7 @@ function PlayerCard({ name, index, points, avatarColor, currentResults, maxTrick
                         <HStack gap='3'>
                             <Avatar size='sm' bg={avatarColor} />
                             <Heading as='h3' size='md'>{name}</Heading>
+                            <IconButton size='sm' fontSize={ICON_SIZE} colorScheme='twitter' variant="ghost" icon={<RepeatIcon />} onClick={onResetScore(index)}></IconButton>
                         </HStack>
                         <Tag size='lg' colorScheme={pointsColorScheme}>{points}</Tag>
                     </HStack>
@@ -60,15 +61,16 @@ function PlayerCard({ name, index, points, avatarColor, currentResults, maxTrick
                         <RoundInput name={name} index={index} value={currentResults?.result || 0} defaultValue={0} min={0} max={maxTricks} onChange={onChangeResults} ></RoundInput>
                     </Stack>
                     <HStack justifyContent='space-between'>
-                        <HStack spacing='3'>
-                            <ButtonGroup size='md' isAttached>
-                                <IconButton isDisabled={(currentResults?.bid || 0) === 0} colorScheme='facebook' fontSize={ICON_SIZE} icon={<GiPirateCaptain />} onClick={onCaptureSkullKing(index)}></IconButton>
-                                <IconButton isDisabled={(currentResults?.bid || 0) === 0} colorScheme='red' fontSize={ICON_SIZE} icon={<GiPirateFlag />} onClick={onCapturePirate(index)}></IconButton>
-                                <IconButton isDisabled={(currentResults?.bid || 0) === 0} colorScheme='teal' fontSize={ICON_SIZE} icon={<GiMermaid />} onClick={onCaptureMermaid(index)}></IconButton>
-                            </ButtonGroup>
-                            <Button size='md' isDisabled={(currentResults?.bid || 0) === 0} colorScheme='twitter' onClick={onGetAdditionalPoints(index)}>+10</Button>
-                        </HStack>
-                        <IconButton size='md' fontSize={ICON_SIZE} colorScheme='twitter' variant="outline" icon={<RepeatIcon />} onClick={onResetScore(index)}></IconButton>
+                        <ButtonGroup size='md' isAttached>
+                            <IconButton isDisabled={(currentResults?.bid || 0) === 0} colorScheme='facebook' fontSize={ICON_SIZE} icon={<GiPirateCaptain />} onClick={onCaptureSkullKing(index)}></IconButton>
+                            <IconButton isDisabled={(currentResults?.bid || 0) === 0} colorScheme='red' fontSize={ICON_SIZE} icon={<GiPirateFlag />} onClick={onCapturePirate(index)}></IconButton>
+                            <IconButton isDisabled={(currentResults?.bid || 0) === 0} colorScheme='teal' fontSize={ICON_SIZE} icon={<GiMermaid />} onClick={onCaptureMermaid(index)}></IconButton>
+                            <IconButton colorScheme='yellow' fontSize={ICON_SIZE} icon={<GiOpenTreasureChest />} onClick={onGetAdditionalPoints(index, 20)}></IconButton>
+                        </ButtonGroup>
+                        <ButtonGroup size='md' isAttached>
+                            <Button isDisabled={(currentResults?.bid || 0) === 0} colorScheme='twitter' onClick={onGetAdditionalPoints(index, 10)}>+10</Button>
+                            <Button colorScheme='twitter' variant="outline" onClick={onGetAdditionalPoints(index, -10)}>-10</Button>
+                        </ButtonGroup>
                     </HStack>
                 </Stack>
             </CardBody>

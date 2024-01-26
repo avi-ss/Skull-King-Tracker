@@ -11,12 +11,21 @@ function App() {
     setGameStarted(true);
   };
 
+  const scrollToTop = () => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 100); // Retrasar 100ms, ajustar según sea necesario
+  }
+
   return (
     <Box padding={6}>
       <GameProvider>
         {!gameStarted ?
           <SetupGame onSetupEnd={startGame} /> :
-          <Game />
+          <Game onRoundChange={scrollToTop} onGameExit={() => setGameStarted(false)} />
         }
       </GameProvider>
     </Box>
