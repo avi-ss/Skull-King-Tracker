@@ -7,18 +7,20 @@ import { Box } from '@chakra-ui/react';
 import { useGameContext } from './context/GameContext';
 
 function App() {
-  const [view, setView] = useState('selectPreset');
+  const [gameStarted, setGameStarted] = useState(false);
   const [setupPlayersVisible, setSetupPlayerVisible] = useState(false);
   const [setupGameVisible, setSetupGameVisible] = useState(false);
 
   const { setPlayerNames, setNumRounds, setTricksPerRound } = useGameContext();
 
   useEffect(() => {
-    // Resetear a los valores iniciales
-    setPlayerNames(['']);
-    setNumRounds(1);
-    setTricksPerRound([]);
-  }, [setupPlayersVisible, setupGameVisible]);
+    if (!setupGameVisible && !setupPlayersVisible && !gameStarted) {
+      // Resetear a los valores iniciales
+      setPlayerNames(['']);
+      setNumRounds(1);
+      setTricksPerRound([]);
+    }
+  }, [setupPlayersVisible, setupGameVisible, gameStarted]);
 
   const scrollToTop = () => {
     setTimeout(() => {
@@ -38,15 +40,20 @@ function App() {
     }
   }
 
+  const handleStartGame = (gameStarted) => {
+    setGameStarted(gameStarted)
+    scrollToTop();
+  }
+
   return (
     <>
-      <SetupPlayersModal visible={setupPlayersVisible} setVisible={setSetupPlayerVisible} onSetupEnd={() => setView('game')} />
-      <SetupGameModal visible={setupGameVisible} setVisible={setSetupGameVisible} onSetupEnd={() => setView('game')} />
+      <SetupPlayersModal visible={setupPlayersVisible} setVisible={setSetupPlayerVisible} onSetupEnd={() => handleStartGame(true)} />
+      <SetupGameModal visible={setupGameVisible} setVisible={setSetupGameVisible} onSetupEnd={() => handleStartGame(true)} />
       <Box padding={6}>
-        {view === 'selectPreset' &&
-          <SelectPreset onSelectPreset={handleSelectPreset} ></SelectPreset>
+        {!gameStarted ?
+          <SelectPreset onSelectPreset={handleSelectPreset} ></SelectPreset> :
+          <Game onRoundChange={scrollToTop} onGameExit={() => handleStartGame(false)} />
         }
-        {view === 'game' && <Game onRoundChange={scrollToTop} onGameExit={() => setView('selectPreset')} />}
       </Box>
     </>
   );

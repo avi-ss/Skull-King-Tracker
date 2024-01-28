@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Stepper, Step, StepIcon, StepIndicator, StepNumber, StepStatus, StepSeparator, useSteps, Stack, useToast } from '@chakra-ui/react';
 import {
     Modal,
@@ -22,6 +22,10 @@ function SetupGameModal({ visible, setVisible, onSetupEnd }) {
     const { playerNames } = useGameContext();
     const initialRef = React.useRef(null);
     const toast = useToast();
+
+    useEffect(() => {
+        setActiveStep(0);
+    }, [visible])
 
     const previousButton = () => {
         if (activeStep === 0) {
