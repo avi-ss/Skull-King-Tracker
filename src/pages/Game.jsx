@@ -20,7 +20,6 @@ import {
     AlertDialogHeader,
     AlertDialogContent,
     AlertDialogOverlay,
-    AlertDialogCloseButton,
 } from '@chakra-ui/react'
 
 import {
@@ -237,7 +236,7 @@ function Game({ onRoundChange, onGameExit }) {
 
     const renderLeaderboardModal = () => {
         return (
-            <Modal size='sm' isOpen={isLeaderboardOpen} onClose={() => setLeaderboardOpen(false)}>
+            <Modal size='full' isOpen={isLeaderboardOpen} onClose={() => setLeaderboardOpen(false)}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Tabla de clasificación</ModalHeader>
@@ -269,9 +268,12 @@ function Game({ onRoundChange, onGameExit }) {
                         </TableContainer>
                     </ModalBody>
                     <ModalFooter flexDirection='column' alignItems='stretch'>
-                        <Button colorScheme='blue' onClick={() => setLeaderboardOpen(false)}>
-                            Cerrar
-                        </Button>
+                        <Stack>
+                            <Button colorScheme='blue' variant={isGameFinished ? 'outline' : 'filled'} onClick={() => setLeaderboardOpen(false)}>
+                                Cerrar
+                            </Button>
+                            {isGameFinished && <Button colorScheme='blue' onClick={onGameExit}>Volver al menú</Button>}
+                        </Stack>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

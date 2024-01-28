@@ -1,16 +1,10 @@
 import React from 'react';
-import { Box, Stepper, Step, StepIcon, StepIndicator, StepNumber, StepStatus, Text, StepSeparator, useSteps } from '@chakra-ui/react';
-import SelectPlayers from './select/SelectPlayers';
-import SelectRounds from './select/SelectRounds';
-import SelectTricks from './select/SelectTricks';
+import { Box, Stepper, Step, StepIcon, StepIndicator, StepNumber, StepStatus, StepSeparator, useSteps } from '@chakra-ui/react';
+import SetupPlayers from './setup/SetupPlayers';
+import SetupRounds from './setup/SetupRounds';
+import SetupTricks from './setup/SetupTricks';
 
-const steps = [
-    { title: 'Jugadores', description: 'Elije a los jugadores del juego' },
-    { title: 'Rondas', description: 'Establece el número de rondas' },
-    { title: 'Bazas', description: 'Define el número de bazas para cada ronda' },
-];
-
-function SetupGame({ onSetupEnd }) {
+function SetupGame({ initialRef, checkInputs, onSetupEnd }) {
     const { activeStep, goToNext, goToPrevious } = useSteps({
         initialStep: 0,
     });
@@ -18,11 +12,11 @@ function SetupGame({ onSetupEnd }) {
     const renderStepContent = (step) => {
         switch (step) {
             case 0:
-                return <SelectPlayers onNext={goToNext} />;
+                return <SetupPlayers initialRef={initialRef} checkInputs={checkInputs} onNext={goToNext} />;
             case 1:
-                return <SelectRounds onNext={goToNext} onBack={goToPrevious} />;
+                return <SetupRounds onNext={goToNext} onBack={goToPrevious} />;
             case 2:
-                return <SelectTricks onBack={goToPrevious} onNext={onSetupEnd} />;
+                return <SetupTricks onBack={goToPrevious} onNext={onSetupEnd} />;
             default:
                 return null;
         }
@@ -31,7 +25,7 @@ function SetupGame({ onSetupEnd }) {
     return (
         <Box>
             <Stepper index={activeStep} gap='0'>
-                {steps.map((index) => (
+                {[0, 1, 2].map((index) => (
                     <Step key={index} gap='0'>
                         <StepIndicator>
                             <StepStatus
@@ -44,9 +38,6 @@ function SetupGame({ onSetupEnd }) {
                     </Step>
                 ))}
             </Stepper>
-            <Text mt="3" align='left'>
-                <b>{steps[activeStep].title}:</b> {steps[activeStep].description}
-            </Text>
             <Box mt={4}>
                 {renderStepContent(activeStep)}
             </Box>

@@ -1,20 +1,15 @@
-import { useState } from 'react';
-import { Input, Button, useToast, Stack, HStack, Divider } from '@chakra-ui/react';
+import { Input, Button, Text, Stack, HStack, Divider } from '@chakra-ui/react';
 import { useGameContext } from '../../context/GameContext';
 
-function SelectPlayers({ onNext }) {
-    const [numPlayers, setNumPlayers] = useState(1);
+function SetupPlayers({ initialRef }) {
     const { playerNames, setPlayerNames } = useGameContext();
-    const toast = useToast();
 
     const addPlayer = () => {
-        setNumPlayers(numPlayers + 1);
         setPlayerNames([...playerNames, '']);
     };
 
     const removePlayer = () => {
-        if (numPlayers > 1) {
-            setNumPlayers(numPlayers - 1);
+        if (playerNames.length > 1) {
             setPlayerNames(playerNames.slice(0, -1));
         }
     };
@@ -23,25 +18,6 @@ function SelectPlayers({ onNext }) {
         const newPlayerNames = [...playerNames];
         newPlayerNames[index] = event.target.value;
         setPlayerNames(newPlayerNames);
-    };
-
-    const nextStep = () => {
-        const nameSet = new Set(playerNames);
-        const areAllNamesUnique = nameSet.size === playerNames.length;
-        const areAllNamesFilled = playerNames.every((name) => name.trim() !== '');
-
-        if (areAllNamesFilled && areAllNamesUnique) {
-            console.log('¡Todos los nombres están llenos y son únicos! Puedes comenzar el juego.');
-            onNext();
-        } else {
-            toast({
-                title: 'Error',
-                description: 'Por favor, asegúrate de que todos los jugadores tengan un nombre único y no estén vacíos.',
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-            });
-        }
     };
 
     const isInputInvalid = (index) => {
@@ -54,6 +30,7 @@ function SelectPlayers({ onNext }) {
         return playerNames.map((name, index) => (
             <Input
                 key={index}
+                ref={initialRef}
                 placeholder={`Jugador ${index + 1}`}
                 value={name}
                 onChange={(event) => handleNameChange(event, index)}
@@ -64,6 +41,9 @@ function SelectPlayers({ onNext }) {
 
     return (
         <Stack spacing={3}>
+            <Text>
+                Introduce el nombre de los jugadores que van a jugar la partida.
+            </Text>
             {renderInputs()}
             <Divider />
             <HStack justifyContent='space-between'>
@@ -74,11 +54,8 @@ function SelectPlayers({ onNext }) {
                     Añadir jugador
                 </Button>
             </HStack>
-            <Button colorScheme='twitter' onClick={nextStep}>
-                Siguiente
-            </Button>
         </Stack>
     );
 }
 
-export default SelectPlayers;
+export default SetupPlayers;

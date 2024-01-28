@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-import { Stack, Divider, Button, Card, CardBody, Text } from '@chakra-ui/react';
+import { Stack, Card, CardBody, Text } from '@chakra-ui/react';
 import RoundInput from '../../components/RoundInput';
 import { useGameContext } from '../../context/GameContext';
 
-function SelectTricks({ onBack, onNext }) {
-    const { numRounds } = useGameContext();
-    const { tricksPerRound, setTricksPerRound } = useGameContext();
+function SetupTricks() {
+    const { numRounds, tricksPerRound, setTricksPerRound } = useGameContext();
 
     useEffect(() => {
         const updatedTricks = Array.from({ length: numRounds }, () => 1);
@@ -20,6 +19,9 @@ function SelectTricks({ onBack, onNext }) {
 
     return (
         <Stack spacing={3}>
+            <Text>
+                Introduce el número de cartas por mano para cada una de las rondas de la partida.
+            </Text>
             {tricksPerRound.map((_, index) => (
                 <Card size='sm' key={index}>
                     <CardBody>
@@ -33,17 +35,8 @@ function SelectTricks({ onBack, onNext }) {
                     </CardBody>
                 </Card>
             ))}
-            <Divider></Divider>
-            <Stack>
-                <Button colorScheme='twitter' variant="outline" onClick={onBack}>
-                    Atrás
-                </Button>
-                <Button colorScheme='twitter' onClick={onNext}>
-                    Siguiente
-                </Button>
-            </Stack>
         </Stack>
     );
 }
 
-export default SelectTricks;
+export default SetupTricks;
