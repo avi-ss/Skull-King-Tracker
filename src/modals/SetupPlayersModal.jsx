@@ -13,7 +13,7 @@ import {
 import { useGameContext } from '../context/GameContext';
 
 function SetupPlayersModal({ visible, setVisible, onSetupEnd }) {
-    const { playerNames, setPlayerNames } = useGameContext();
+    const { playerNames, setPlayerNames, width } = useGameContext();
     const toast = useToast();
     const initialRef = React.useRef(null)
 
@@ -73,7 +73,7 @@ function SetupPlayersModal({ visible, setVisible, onSetupEnd }) {
     };
 
     return (
-        <Modal size='full' isOpen={visible} onClose={() => setVisible(false)} initialFocusRef={initialRef} scrollBehavior='inside'>
+        <Modal size={width > 600 ? 'lg' : 'full'} isOpen={visible} onClose={() => setVisible(false)} initialFocusRef={initialRef} scrollBehavior='inside'>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Seleccionar jugadores</ModalHeader>

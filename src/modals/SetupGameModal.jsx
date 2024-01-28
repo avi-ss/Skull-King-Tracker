@@ -19,7 +19,7 @@ function SetupGameModal({ visible, setVisible, onSetupEnd }) {
     const { activeStep, goToNext, goToPrevious, setActiveStep } = useSteps({
         initialStep: 0,
     });
-    const { playerNames } = useGameContext();
+    const { playerNames, width } = useGameContext();
     const initialRef = React.useRef(null);
     const toast = useToast();
 
@@ -92,7 +92,7 @@ function SetupGameModal({ visible, setVisible, onSetupEnd }) {
     };
 
     return (
-        <Modal size='full' isOpen={visible} onClose={exitSetup} initialFocusRef={initialRef} scrollBehavior='inside'>
+        <Modal size={width > 600 ? 'lg' : 'full'} isOpen={visible} onClose={exitSetup} initialFocusRef={initialRef} scrollBehavior='inside'>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Crear partida customizada</ModalHeader>

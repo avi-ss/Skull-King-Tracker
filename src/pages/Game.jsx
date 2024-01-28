@@ -36,7 +36,7 @@ import { assignColors } from '../utils/colors';
 import PlayerCard from '../components/PlayerCard';
 
 function Game({ onRoundChange, onGameExit }) {
-    const { playerNames, tricksPerRound, numRounds } = useGameContext();
+    const { playerNames, tricksPerRound, numRounds, width } = useGameContext();
     const [isLeaderboardOpen, setLeaderboardOpen] = useState(false);
     const [currentRound, setCurrentRound] = useState(0);
     const [avatarColors, setAvatarColors] = useState([]);
@@ -236,7 +236,7 @@ function Game({ onRoundChange, onGameExit }) {
 
     const renderLeaderboardModal = () => {
         return (
-            <Modal size='full' isOpen={isLeaderboardOpen} onClose={() => setLeaderboardOpen(false)}>
+            <Modal size={width > 600 ? 'lg' : 'full'} isOpen={isLeaderboardOpen} onClose={() => setLeaderboardOpen(false)}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Tabla de clasificación</ModalHeader>
