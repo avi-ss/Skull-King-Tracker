@@ -1,0 +1,8 @@
+{
+  "appId": "es.aviss.skull-king-tracker",
+  "appName": "Skull King Tracker",
+  "webDir": "build",
+  "server": {
+    "androidScheme": "https"
+  }
+}

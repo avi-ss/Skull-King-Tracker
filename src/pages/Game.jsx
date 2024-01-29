@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGameContext } from '../context/GameContext';
-import { Button, Heading, Tag, Stack, HStack } from '@chakra-ui/react';
+import { Button, Heading, Tag, Stack, HStack, useToast, SimpleGrid } from '@chakra-ui/react';
 import { InfoIcon } from '@chakra-ui/icons';
 
 import {
@@ -43,9 +43,10 @@ function Game({ onRoundChange, onGameExit }) {
     const [playerScores, setPlayerScores] = useState([]);
     const [isGameFinished, setGameFinished] = useState(false);
 
-    const [isAlertOpen, setAlertOpen] = useState(false);
-    const [alertHeaderText, setAlertHeaderText] = useState('')
-    const [alertBodyText, setAlertBodyText] = useState('')
+    const [isExitGameAlertOpen, setExitGameAlertOpen] = useState(false);
+    const [isPrevRoundAlertOpen, setPrevRoundAlertOpen] = useState(false);
+
+    const toast = useToast();
 
     useEffect(() => {
         const initialScores = playerNames.map(name => ({
@@ -141,11 +142,20 @@ function Game({ onRoundChange, onGameExit }) {
                 },
                 additionalPoints: 0
             };
+
+            toast({
+                title: 'Info',
+                description: `Se han reseteado los valores de ${playerNames[index]}.`,
+                status: 'info',
+                duration: 1500,
+                isClosable: true,
+            });
+
             return newScores;
         });
     }
 
-    const calculateRoundPoints = (index) => {
+    const calculateRoundPoints = (index, currentRound) => {
         const {
             bid = 0,
             result = 0,
@@ -170,26 +180,21 @@ function Game({ onRoundChange, onGameExit }) {
         return roundScore;
     };
 
-    const previousRound = () => {
-        if (currentRound > 0) {
-            setAlertHeaderText('Aviso de progreso');
-            setAlertBodyText('¿Estás seguro de que quieres volver atrás? Esto eliminará el progreso de la última ronda jugada.');
-            setAlertOpen(true);
-        }
-        else {
-            setAlertHeaderText('Salir de la partida');
-            setAlertBodyText('¿Estás seguro de que quieres salir de la partida? Volverás al menú de selección.');
-            setAlertOpen(true);
-        }
-    }
-
     const nextRound = () => {
+        // TODO: Calculate strict mode
         if (!isGameFinished) {
             setPlayerScores(prevScores => {
                 const newFinalScores = [...prevScores];
                 newFinalScores.forEach((_, index) => {
-                    newFinalScores[index].totalScore += calculateRoundPoints(index);
+                    newFinalScores[index].totalScore += calculateRoundPoints(index, currentRound);
                 })
+                toast({
+                    title: 'Siguiente ronda',
+                    description: `Se ha actualizado correctamente la tabla de puntuaciones.`,
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
                 return newFinalScores;
             });
         }
@@ -203,20 +208,44 @@ function Game({ onRoundChange, onGameExit }) {
         }
     }
 
-    const confirmAlert = () => {
-        setAlertOpen(false);
+    const calculatePreviousRound = () => {
+        setPrevRoundAlertOpen(false);
 
         if (currentRound > 0) {
             // TODO: Resetear valores de la ultima ronda
+            setPlayerScores(prevScores => {
+                const newScores = [...prevScores];
+                newScores.forEach((_, index) => {
+                    // Resto los puntos de la ronda anterior
+                    newScores[index].totalScore -= calculateRoundPoints(index, currentRound - 1);
+                    // Reseteo los puntos de la ronda anterior
+                    newScores[index].roundScores[currentRound - 1] = {
+                        bid: 0,
+                        result: 0,
+                        captured: {
+                            pirate: 0,
+                            skullKing: 0,
+                            mermaid: 0,
+                        },
+                        additionalPoints: 0
+                    };
+                })
+                toast({
+                    title: 'Anterior ronda',
+                    description: `Se ha actualizado correctamente la tabla de puntuaciones.`,
+                    status: 'success',
+                    duration: 1500,
+                    isClosable: true,
+                });
+                return newScores;
+            });
+
             setCurrentRound(currentRound - 1);
-        }
-        else {
-            onGameExit(); // Llamamos al padre
         }
     }
 
     const renderPoints = (index) => {
-        const points = calculateRoundPoints(index);
+        const points = calculateRoundPoints(index, currentRound);
         return isNaN(points) ? "🤐" : points;
     };
 
@@ -269,7 +298,7 @@ function Game({ onRoundChange, onGameExit }) {
                     </ModalBody>
                     <ModalFooter flexDirection='column' alignItems='stretch'>
                         <Stack>
-                            <Button colorScheme='blue' variant={isGameFinished ? 'outline' : 'filled'} onClick={() => setLeaderboardOpen(false)}>
+                            <Button colorScheme='blue' variant={isGameFinished ? 'outline' : 'solid'} onClick={() => setLeaderboardOpen(false)}>
                                 Cerrar
                             </Button>
                             {isGameFinished && <Button colorScheme='blue' onClick={onGameExit}>Volver al menú</Button>}
@@ -280,30 +309,65 @@ function Game({ onRoundChange, onGameExit }) {
         )
     }
 
+    const renderExitGameAlert = () => {
+        const cancelRef = React.useRef()
+
+        return (
+            <AlertDialog
+                isOpen={isExitGameAlertOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={() => setExitGameAlertOpen(false)}
+                isCentered
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Salir de la partida
+                        </AlertDialogHeader>
+                        <AlertDialogBody>
+                            ¿Estás seguro de que quieres salir de la partida? Volverás al menú de selección.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={() => setExitGameAlertOpen(false)}>
+                                Cancelar
+                            </Button>
+                            <Button colorScheme='red' onClick={() => {
+                                setExitGameAlertOpen(false);
+                                onGameExit()
+                            }} ml={3}>
+                                Salir
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+        )
+    }
+
     const renderPreviousRoundAlert = () => {
         const cancelRef = React.useRef()
 
         return (
             <AlertDialog
-                isOpen={isAlertOpen}
+                isOpen={isPrevRoundAlertOpen}
                 leastDestructiveRef={cancelRef}
-                onClose={() => setAlertOpen(false)}
+                onClose={() => setPrevRoundAlertOpen(false)}
             >
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            {alertHeaderText}
+                            Aviso de progreso
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
-                            {alertBodyText}
+                            ¿Estás seguro de que quieres volver atrás? Esto eliminará el progreso de la última ronda jugada.
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
-                            <Button ref={cancelRef} onClick={() => setAlertOpen(false)}>
+                            <Button ref={cancelRef} onClick={() => setPrevRoundAlertOpen(false)}>
                                 Cancelar
                             </Button>
-                            <Button colorScheme='red' onClick={confirmAlert} ml={3}>
+                            <Button colorScheme='red' onClick={calculatePreviousRound} ml={3}>
                                 Confirmar
                             </Button>
                         </AlertDialogFooter>
@@ -316,24 +380,30 @@ function Game({ onRoundChange, onGameExit }) {
     return (
         <>
             <Stack spacing={4}>
-                <HStack justifyContent='space-between'>
-                    <Heading as='h1' size='xl'>Ronda {currentRound + 1} de {numRounds}</Heading>
-                    <Tag size='lg' colorScheme='twitter'>{tricksPerRound[currentRound]} bazas</Tag>
-                </HStack>
                 <Button size='md' leftIcon={<InfoIcon />} colorScheme='twitter' variant="outline" onClick={() => setLeaderboardOpen(true)}>
                     Clasificación
                 </Button>
+                <HStack justifyContent='space-between'>
+                    <Heading as='h2' size='lg'>Ronda {currentRound + 1} de {numRounds}</Heading>
+                    <Tag size='md' colorScheme='twitter'>{tricksPerRound[currentRound]} bazas</Tag>
+                </HStack>
                 {renderPlayerCards()}
                 <Stack>
-                    <Button colorScheme='twitter' variant="outline" onClick={previousRound}>
-                        Atrás
-                    </Button>
+                    <SimpleGrid columns={2} spacing={4}>
+                        <Button colorScheme='red' variant="outline" onClick={() => setExitGameAlertOpen(true)}>
+                            Salir
+                        </Button>
+                        <Button colorScheme='twitter' variant="outline" isDisabled={currentRound === 0 || isGameFinished} onClick={() => setPrevRoundAlertOpen(true)}>
+                            Atrás
+                        </Button>
+                    </SimpleGrid>
                     <Button colorScheme='twitter' onClick={nextRound}>
-                        Siguiente
+                        {currentRound + 1 === numRounds ? 'Finalizar' : 'Siguiente'}
                     </Button>
                 </Stack>
             </Stack>
             {renderLeaderboardModal()}
+            {renderExitGameAlert()}
             {renderPreviousRoundAlert()}
         </>
     );

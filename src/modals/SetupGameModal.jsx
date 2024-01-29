@@ -64,10 +64,7 @@ function SetupGameModal({ visible, setVisible, onSetupEnd }) {
         const areAllNamesUnique = nameSet.size === playerNames.length;
         const areAllNamesFilled = playerNames.every((name) => name.trim() !== '');
 
-        if (areAllNamesFilled && areAllNamesUnique) {
-            console.log('¡Todos los nombres están llenos y son únicos! Puedes comenzar el juego.');
-            goToNext();
-        } else {
+        if (!(areAllNamesFilled && areAllNamesUnique)) {
             toast({
                 title: 'Error',
                 description: 'Por favor, asegúrate de que todos los jugadores tengan un nombre único y no estén vacíos.',
@@ -75,6 +72,19 @@ function SetupGameModal({ visible, setVisible, onSetupEnd }) {
                 duration: 3000,
                 isClosable: true,
             });
+        }
+        else if (playerNames.length < 2) {
+            toast({
+                title: 'Error',
+                description: 'Por favor, incluye al menos a dos jugadores en la partida.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+        else {
+            console.log('¡Todos los nombres están llenos y son únicos! Puedes comenzar el juego.');
+            goToNext();
         }
     };
 
@@ -122,7 +132,7 @@ function SetupGameModal({ visible, setVisible, onSetupEnd }) {
                             {activeStep === 0 ? 'Cerrar' : 'Atrás'}
                         </Button>
                         <Button colorScheme='twitter' onClick={nextButton}>
-                            {activeStep === 2 ? 'Continuar' : 'Empezar'}
+                            {activeStep === 2 ? 'Empezar' : 'Continuar'}
                         </Button>
                     </Stack>
                 </ModalFooter>

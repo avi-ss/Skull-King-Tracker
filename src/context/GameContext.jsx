@@ -8,11 +8,12 @@ export const GameProvider = ({ children }) => {
     const [playerNames, setPlayerNames] = useState(['']);
     const [numRounds, setNumRounds] = useState(1);
     const [tricksPerRound, setTricksPerRound] = useState([]);
+
     const [width, setWidth] = useState(window.innerWidth);
+    const [strictMode, setStrictMode] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
-            console.log(window.innerWidth);
             setWidth(window.innerWidth);
         };
 
@@ -31,6 +32,8 @@ export const GameProvider = ({ children }) => {
             tricksPerRound,
             setTricksPerRound,
             width,
+            strictMode,
+            setStrictMode
         }}>
             {children}
         </GameContext.Provider>
