@@ -53,7 +53,7 @@ function PlayerCard({ name, index, points, palette, currentResults, maxTricks, o
                             <Heading as='h3' size='md'>{name}</Heading>
                             <IconButton size='sm' fontSize={ICON_SIZE} colorScheme={palette?.scheme} variant="ghost" icon={<RepeatIcon />} onClick={onResetScore(index)}></IconButton>
                         </HStack>
-                        <Tag size='lg' bg={palette?.tag} variant='solid'>{points}</Tag>
+                        <Tag size='lg' colorScheme={palette?.scheme} variant='solid'>{points}</Tag>
                     </HStack>
                     <Collapse in={hasSpecialBadges()} animateOpacity>
                         {renderSpecialBadges()}
