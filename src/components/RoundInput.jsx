@@ -1,7 +1,11 @@
 import React from 'react';
-import { Button, HStack, Input, useNumberInput } from '@chakra-ui/react';
+import { IconButton, HStack, Input, useNumberInput } from '@chakra-ui/react';
 
-function RoundInput({ name, index, value, defaultValue = 1, min = 1, max = 100, onChange }) {
+import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
+
+const ICON_SIZE = '20px';
+
+function RoundInput({ name, index, value, scheme, defaultValue = 1, min = 1, max = 100, onChange }) {
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
         useNumberInput({
             step: 1,
@@ -18,9 +22,9 @@ function RoundInput({ name, index, value, defaultValue = 1, min = 1, max = 100, 
 
     return (
         <HStack>
-            <Button {...dec}>-</Button>
-            <Input {...input} />
-            <Button {...inc}>+</Button>
+            <IconButton colorScheme={scheme} fontSize={ICON_SIZE} icon={<ArrowBackIcon />} {...dec}>-</IconButton>
+            <Input isReadOnly fontWeight='600' {...input} />
+            <IconButton colorScheme={scheme} fontSize={ICON_SIZE} icon={<ArrowForwardIcon />} {...inc}>+</IconButton>
         </HStack>
     );
 }

@@ -31,7 +31,7 @@ function SelectPreset({ onSelectPreset }) {
                     <FormLabel htmlFor='strict-mode' mb='0' textAlign='right'>
                         Activar modo estricto
                     </FormLabel>
-                    <Switch size='md' id='strict-mode' isChecked={strictMode} onChange={handleSwitchStrictMode} />
+                    <Switch size='lg' id='strict-mode' isChecked={strictMode} onChange={handleSwitchStrictMode} />
                 </HStack>
             </Stack>
             <Collapse in={strictMode} animateOpacity >

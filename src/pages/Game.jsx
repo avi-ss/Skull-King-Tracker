@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useGameContext } from '../context/GameContext';
-import { Button, Heading, Tag, Stack, HStack, useToast, SimpleGrid } from '@chakra-ui/react';
+import { Button, Heading, Tag, Stack, HStack, useToast, SimpleGrid, Wrap, WrapItem } from '@chakra-ui/react';
 import { InfoIcon } from '@chakra-ui/icons';
+import { GiKrakenTentacle } from 'react-icons/gi';
 
 import {
     Modal,
@@ -36,15 +37,17 @@ import { assignColors } from '../utils/colors';
 import PlayerCard from '../components/PlayerCard';
 
 function Game({ onRoundChange, onGameExit }) {
-    const { playerNames, tricksPerRound, numRounds, width } = useGameContext();
+    const { playerNames, tricksPerRound, numRounds, width, strictMode } = useGameContext();
     const [isLeaderboardOpen, setLeaderboardOpen] = useState(false);
     const [currentRound, setCurrentRound] = useState(0);
-    const [avatarColors, setAvatarColors] = useState([]);
+    const [palettes, setPalettes] = useState([]);
     const [playerScores, setPlayerScores] = useState([]);
     const [isGameFinished, setGameFinished] = useState(false);
 
     const [isExitGameAlertOpen, setExitGameAlertOpen] = useState(false);
     const [isPrevRoundAlertOpen, setPrevRoundAlertOpen] = useState(false);
+    const [isStrictModeAlertOpen, setStrictModeAlertOpen] = useState(false);
+    const [strictModeDiff, setStrictModeDiff] = useState(0);
 
     const toast = useToast();
 
@@ -63,7 +66,8 @@ function Game({ onRoundChange, onGameExit }) {
             })),
             totalScore: 0
         }));
-        setAvatarColors(assignColors(numRounds));
+        const colorPalettes = assignColors(numRounds);
+        setPalettes(colorPalettes);
         setPlayerScores(initialScores);
     }, [playerNames, numRounds]);
 
@@ -180,25 +184,55 @@ function Game({ onRoundChange, onGameExit }) {
         return roundScore;
     };
 
+    const checkNextRound = () => {
+        // Con el modo estricto se comprueban que los resultados sean aceptables
+        if (strictMode && !isGameFinished) {
+            const roundsPlayed = tricksPerRound[currentRound];
+            const roundsWonByPlayers = playerScores.reduce((acc, score) => {
+                acc += score.roundScores[currentRound].result;
+                return acc;
+            }, 0)
+
+            if (roundsWonByPlayers > roundsPlayed) {
+                toast({
+                    title: 'Modo estricto',
+                    description: `No se pueden ganar ${roundsWonByPlayers} manos en una ronda de ${roundsPlayed} cartas.`,
+                    status: 'error',
+                    duration: 1500,
+                    isClosable: true,
+                });
+            }
+            else if (roundsWonByPlayers < roundsPlayed) {
+                setStrictModeDiff(roundsPlayed - roundsWonByPlayers);
+                setStrictModeAlertOpen(true);
+            }
+            else {
+                nextRound();
+            }
+        }
+        // En caso contrario, se calcula y se pasa de ronda
+        else {
+            nextRound();
+        }
+    }
+
     const nextRound = () => {
-        // TODO: Calculate strict mode
         if (!isGameFinished) {
             setPlayerScores(prevScores => {
                 const newFinalScores = [...prevScores];
                 newFinalScores.forEach((_, index) => {
                     newFinalScores[index].totalScore += calculateRoundPoints(index, currentRound);
                 })
-                toast({
-                    title: 'Siguiente ronda',
-                    description: `Se ha actualizado correctamente la tabla de puntuaciones.`,
-                    status: 'success',
-                    duration: 1500,
-                    isClosable: true,
-                });
                 return newFinalScores;
             });
+            toast({
+                title: 'Siguiente ronda',
+                description: `Se ha actualizado correctamente la tabla de puntuaciones.`,
+                status: 'success',
+                duration: 1500,
+                isClosable: true,
+            });
         }
-
         if (currentRound + 1 < numRounds) {
             setCurrentRound(currentRound + 1);
         }
@@ -252,13 +286,15 @@ function Game({ onRoundChange, onGameExit }) {
     const renderPlayerCards = () => {
         return playerNames.map((name, index) => {
             const points = renderPoints(index);
-            const avatarColor = avatarColors[index]
+            const colorPalette = palettes[index];
 
             return (
-                <PlayerCard key={index} name={name} index={index} points={points} maxTricks={tricksPerRound[currentRound]} avatarColor={avatarColor} currentResults={playerScores?.[index]?.roundScores?.[currentRound] || {}}
-                    onChangeBid={changeBid} onChangeResults={changeResults} onCaptureSkullKing={captureSkullKing}
-                    onCapturePirate={capturePirate} onCaptureMermaid={captureMermaid} onGetAdditionalPoints={getAdditionalPoints} onResetScore={resetCurrentScore}
-                ></PlayerCard>
+                <WrapItem key={index} padding='1'>
+                    <PlayerCard key={index} name={name} index={index} points={points} maxTricks={tricksPerRound[currentRound]} palette={colorPalette} currentResults={playerScores?.[index]?.roundScores?.[currentRound] || {}}
+                        onChangeBid={changeBid} onChangeResults={changeResults} onCaptureSkullKing={captureSkullKing}
+                        onCapturePirate={capturePirate} onCaptureMermaid={captureMermaid} onGetAdditionalPoints={getAdditionalPoints} onResetScore={resetCurrentScore}
+                    ></PlayerCard>
+                </WrapItem>
             )
         });
     };
@@ -306,6 +342,41 @@ function Game({ onRoundChange, onGameExit }) {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+        )
+    }
+
+    const renderStrictModeAlert = () => {
+        const cancelRef = React.useRef()
+
+        return (
+            <AlertDialog
+                isOpen={isStrictModeAlertOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={() => setStrictModeAlertOpen(false)}
+                isCentered
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Aviso de Kraken
+                        </AlertDialogHeader>
+                        <AlertDialogBody>
+                            En esta ronda ha habido <b>{strictModeDiff}</b> ronda(s) jugada(s) que nadie ha ganado. Por favor, comprueba que los resultados están bien.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={() => setStrictModeAlertOpen(false)}>
+                                Cancelar
+                            </Button>
+                            <Button colorScheme='red' rightIcon={<GiKrakenTentacle />} onClick={() => {
+                                setStrictModeAlertOpen(false);
+                                nextRound()
+                            }} ml={3}>
+                                Kraken
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         )
     }
 
@@ -379,15 +450,17 @@ function Game({ onRoundChange, onGameExit }) {
 
     return (
         <>
-            <Stack spacing={4}>
+            <Stack spacing='4'>
                 <Button size='md' leftIcon={<InfoIcon />} colorScheme='twitter' variant="outline" onClick={() => setLeaderboardOpen(true)}>
                     Clasificación
                 </Button>
                 <HStack justifyContent='space-between'>
                     <Heading as='h2' size='lg'>Ronda {currentRound + 1} de {numRounds}</Heading>
-                    <Tag size='md' colorScheme='twitter'>{tricksPerRound[currentRound]} bazas</Tag>
+                    <Tag size='lg' colorScheme='twitter'>{tricksPerRound[currentRound]} {tricksPerRound[currentRound] === 1 ? 'baza' : 'bazas'}</Tag>
                 </HStack>
-                {renderPlayerCards()}
+                <Wrap justify='center'>
+                    {renderPlayerCards()}
+                </Wrap>
                 <Stack>
                     <SimpleGrid columns={2} spacing={4}>
                         <Button colorScheme='red' variant="outline" onClick={() => setExitGameAlertOpen(true)}>
@@ -397,12 +470,13 @@ function Game({ onRoundChange, onGameExit }) {
                             Atrás
                         </Button>
                     </SimpleGrid>
-                    <Button colorScheme='twitter' onClick={nextRound}>
+                    <Button colorScheme='twitter' onClick={checkNextRound}>
                         {currentRound + 1 === numRounds ? 'Finalizar' : 'Siguiente'}
                     </Button>
                 </Stack>
             </Stack>
             {renderLeaderboardModal()}
+            {renderStrictModeAlert()}
             {renderExitGameAlert()}
             {renderPreviousRoundAlert()}
         </>
