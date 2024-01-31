@@ -33,7 +33,7 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 
-import { assignColors } from '../utils/colors';
+import { randomColors } from '../utils/colors';
 import PlayerCard from '../components/PlayerCard';
 
 function Game({ onRoundChange, onGameExit }) {
@@ -66,7 +66,7 @@ function Game({ onRoundChange, onGameExit }) {
             })),
             totalScore: 0
         }));
-        const colorPalettes = assignColors(numRounds);
+        const colorPalettes = randomColors(numRounds);
         setPalettes(colorPalettes);
         setPlayerScores(initialScores);
     }, [playerNames, numRounds]);
@@ -303,7 +303,7 @@ function Game({ onRoundChange, onGameExit }) {
         return (
             <Modal size={width > 600 ? 'lg' : 'full'} isOpen={isLeaderboardOpen} onClose={() => setLeaderboardOpen(false)}>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent bg='gray.50'>
                     <ModalHeader>Tabla de clasificación</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

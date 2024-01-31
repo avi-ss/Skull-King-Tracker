@@ -11,7 +11,7 @@ function SetupTricks() {
         setTricksPerRound(updatedTricks);
     }, [numRounds]);
 
-    const handleInputChange = (_, index, valueAsNumber,) => {
+    const handleInputChange = (_, index, valueAsNumber) => {
         const updatedTricks = [...tricksPerRound];
         updatedTricks[index] = valueAsNumber;
         setTricksPerRound(updatedTricks);

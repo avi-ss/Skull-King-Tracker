@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SelectPreset from './pages/SelectPreset';
-import SetupPlayersModal from './modals/SetupPlayersModal';
-import SetupGameModal from './modals/SetupGameModal';
+import SetupPresetGameModal from './modals/SetupPresetGameModal';
+import SetupCustomGameModal from './modals/SetupCustomGameModal';
 import Game from './pages/Game';
 import { Box, Heading } from '@chakra-ui/react';
 import { useGameContext } from './context/GameContext';
@@ -48,15 +48,15 @@ function App() {
 
   return (
     <div className="view">
-      <Box padding={6}>
+      <Box padding={6} bg='gray.50'>
         <Heading as='h1' size='xl' mb='4'>Skull King Tracker</Heading>
         {!gameStarted ?
           <SelectPreset onSelectPreset={handleSelectPreset} ></SelectPreset> :
           <Game onRoundChange={scrollToTop} onGameExit={() => handleStartGame(false)} />
         }
       </Box>
-      <SetupPlayersModal visible={setupPlayersVisible} setVisible={setSetupPlayerVisible} onSetupEnd={() => handleStartGame(true)} />
-      <SetupGameModal visible={setupGameVisible} setVisible={setSetupGameVisible} onSetupEnd={() => handleStartGame(true)} />
+      <SetupPresetGameModal visible={setupPlayersVisible} setVisible={setSetupPlayerVisible} onSetupEnd={() => handleStartGame(true)} />
+      <SetupCustomGameModal visible={setupGameVisible} setVisible={setSetupGameVisible} onSetupEnd={() => handleStartGame(true)} />
     </div>
   );
 }

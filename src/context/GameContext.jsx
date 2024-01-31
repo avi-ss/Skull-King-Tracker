@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import storage from '../utils/storage';
 
 const GameContext = createContext();
 
@@ -6,11 +7,17 @@ export const useGameContext = () => useContext(GameContext);
 
 export const GameProvider = ({ children }) => {
     const [playerNames, setPlayerNames] = useState(['']);
+    const [playerLists, setPlayerLists] = useState([]);
     const [numRounds, setNumRounds] = useState(1);
     const [tricksPerRound, setTricksPerRound] = useState([]);
 
     const [width, setWidth] = useState(window.innerWidth);
     const [strictMode, setStrictMode] = useState(false);
+
+    // Cargar listas al montar el componente
+    useEffect(() => {
+        setPlayerLists(storage.getPlayerLists());
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -33,7 +40,9 @@ export const GameProvider = ({ children }) => {
             setTricksPerRound,
             width,
             strictMode,
-            setStrictMode
+            setStrictMode,
+            playerLists,
+            setPlayerLists
         }}>
             {children}
         </GameContext.Provider>

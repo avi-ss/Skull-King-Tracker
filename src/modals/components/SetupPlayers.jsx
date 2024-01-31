@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Input, Button, Text, Stack, SimpleGrid, Divider } from '@chakra-ui/react';
+import { Input, Button, Text, Stack, SimpleGrid } from '@chakra-ui/react';
 import { useGameContext } from '../../context/GameContext';
 
 function SetupPlayers({ initialRef }) {
@@ -55,19 +55,20 @@ function SetupPlayers({ initialRef }) {
 
     return (
         <Stack spacing={3}>
-            <Text>
+            <Text mb='2'>
                 Introduce el nombre de los jugadores que van a jugar la partida.
             </Text>
             {renderInputs()}
-            <Divider />
-            <SimpleGrid columns={2} spacing={4}>
-                <Button colorScheme='red' onClick={removePlayer} >
-                    Quitar jugador
-                </Button>
-                <Button colorScheme='green' onClick={addPlayer}>
-                    Añadir jugador
-                </Button>
-            </SimpleGrid>
+            <Stack>
+                <SimpleGrid mt='2' columns={2} spacing={4}>
+                    <Button colorScheme='red' onClick={removePlayer} >
+                        Quitar jugador
+                    </Button>
+                    <Button colorScheme='green' onClick={addPlayer}>
+                        Añadir jugador
+                    </Button>
+                </SimpleGrid>
+            </Stack>
         </Stack>
     );
 }

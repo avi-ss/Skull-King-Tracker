@@ -1,6 +1,6 @@
 import PresetCard from '../components/PresetCard';
 import { useGameContext } from '../context/GameContext';
-import { Alert, AlertIcon, Heading, Stack, Text, Collapse, FormLabel, Switch, HStack, Highlight } from '@chakra-ui/react'
+import { Alert, AlertIcon, Stack, Text, Collapse, FormLabel, Switch, HStack } from '@chakra-ui/react'
 
 import { PRESETS } from '../utils/presets.js';
 

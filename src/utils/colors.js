@@ -12,7 +12,7 @@ const allColors = [
 
 
 // Esta función asigna un color único a cada índice y devuelve un array de colores
-const assignColors = (numColors) => {
+const randomColors = (numColors) => {
   const assignedColors = [];
   let availableColors = [...allColors];
 
@@ -29,4 +29,4 @@ const assignColors = (numColors) => {
   return assignedColors;
 };
 
-export { assignColors };
+export { randomColors };

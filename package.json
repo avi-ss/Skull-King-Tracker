@@ -1,7 +1,7 @@
 {
   "name": "skull-king-tracker",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "homepage": "https://avi-ss.github.io/Skull-King-Tracker/",
   "scripts": {
@@ -11,7 +11,8 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "deploy:android": "if exist android rmdir /s /q android && npm run build:android && npx cap add android && npx cap run android"
   },
   "dependencies": {
     "@capacitor/android": "^5.6.0",
