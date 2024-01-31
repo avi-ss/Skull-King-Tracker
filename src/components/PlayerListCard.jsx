@@ -1,9 +1,10 @@
-import { Button, Card, CardHeader, Tag, Text, CardFooter, HStack, SimpleGrid } from '@chakra-ui/react';
+import { Button, Card, CardHeader, Tag, Text, CardFooter, HStack, SimpleGrid, useColorMode } from '@chakra-ui/react';
 
 function PlayerListCard({ index, scheme, playerNames, onSelect, onDelete }) {
+    const { colorMode } = useColorMode();
 
     return (
-        <Card key={index} size='sm' variant='elevated' bg={`${scheme}.50`}>
+        <Card key={index} size='sm' variant='elevated' bg={colorMode === 'light' ? `${scheme}.50` : `${scheme}.900`}>
             <CardHeader>
                 <HStack justifyContent='space-between'>
                     <Text fontWeight='500'>{playerNames.join(", ")}</Text>

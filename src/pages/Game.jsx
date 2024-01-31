@@ -303,7 +303,7 @@ function Game({ onRoundChange, onGameExit }) {
         return (
             <Modal size={width > 600 ? 'lg' : 'full'} isOpen={isLeaderboardOpen} onClose={() => setLeaderboardOpen(false)}>
                 <ModalOverlay />
-                <ModalContent bg='gray.50'>
+                <ModalContent>
                     <ModalHeader>Tabla de clasificación</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

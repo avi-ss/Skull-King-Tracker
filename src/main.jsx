@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import theme from './utils/theme.js'
 
 import { GameProvider } from './context/GameContext'
 import { ChakraProvider } from '@chakra-ui/react'
@@ -10,7 +11,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 const basename = import.meta.env.VITE_BASE_URL || '/';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <ChakraProvider>
+  <ChakraProvider theme={theme}>
     <GameProvider>
       <BrowserRouter basename={basename}>
         <Routes>

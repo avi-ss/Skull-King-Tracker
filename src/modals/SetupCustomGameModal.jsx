@@ -122,7 +122,7 @@ function SetupCustomGameModal({ visible, setVisible, onSetupEnd }) {
             <CreatePlayerListModal visible={isCreatingList} setVisible={setCreatingList} onSetupEnd={handleSavePlayerList} />
             <Modal size={width > 600 ? 'lg' : 'full'} isOpen={visible} onClose={exitSetup} initialFocusRef={initialRef} scrollBehavior='inside'>
                 <ModalOverlay />
-                <ModalContent bg='gray.50'>
+                <ModalContent>
                     <ModalHeader>Crear partida customizada</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>

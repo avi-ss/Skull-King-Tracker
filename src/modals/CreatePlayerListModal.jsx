@@ -35,7 +35,7 @@ function CreatePlayerListModal({ visible, setVisible, onSetupEnd }) {
     return (
         <Modal size={width > 600 ? 'lg' : 'full'} isOpen={visible} onClose={() => setVisible(false)} initialFocusRef={initialRef} scrollBehavior='inside'>
             <ModalOverlay />
-            <ModalContent bg='gray.50'>
+            <ModalContent>
                 <ModalHeader>Crea una lista de jugadores</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>

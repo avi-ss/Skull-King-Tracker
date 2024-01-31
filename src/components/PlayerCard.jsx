@@ -1,13 +1,15 @@
 import React from 'react';
 
 import RoundInput from '../components/RoundInput';
-import { Avatar, Badge, ButtonGroup, IconButton, Button, Card, CardHeader, CardBody, Heading, Tag, Text, Stack, HStack, Collapse } from '@chakra-ui/react';
+import { Avatar, Badge, ButtonGroup, IconButton, Button, Card, CardHeader, CardBody, Heading, Tag, Text, Stack, HStack, Collapse, useColorMode} from '@chakra-ui/react';
 import { GiPirateCaptain, GiPirateFlag, GiMermaid, GiOpenTreasureChest } from "react-icons/gi";
 import { RepeatIcon } from '@chakra-ui/icons';
 
 const ICON_SIZE = '26px';
 
 function PlayerCard({ name, index, points, palette, currentResults, maxTricks, onChangeBid, onChangeResults, onCaptureSkullKing, onCapturePirate, onCaptureMermaid, onGetAdditionalPoints, onResetScore }) {
+    const { colorMode } = useColorMode();
+
     const hasSpecialBadges = () => {
         const {
             captured = { pirate: 0, mermaid: 0, skullKing: 0 },
@@ -44,7 +46,7 @@ function PlayerCard({ name, index, points, palette, currentResults, maxTricks, o
     }
 
     return (
-        <Card key={index} size='sm' variant='elevated' padding={2} bg={palette?.bg}>
+        <Card key={index} size='sm' variant='elevated' padding={2} bg={colorMode === 'light' ? `${palette?.scheme}.50` : `${palette?.scheme}.900`}>
             <CardHeader>
                 <Stack gap='0'>
                     <HStack justifyContent='space-between'>
