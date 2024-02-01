@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Stepper, Step, StepIcon, StepIndicator, StepNumber, StepStatus, StepSeparator, useSteps, Stack, useToast } from '@chakra-ui/react';
 import {
     Modal,
@@ -24,6 +25,7 @@ function SetupCustomGameModal({ visible, setVisible, onSetupEnd }) {
     });
     const [isCreatingList, setCreatingList] = useState(false);
     const { playerNames, setPlayerNames, setPlayerLists, width } = useGameContext();
+    const { t } = useTranslation('global');
     const initialRef = React.useRef(null);
     const toast = useToast();
 
@@ -46,8 +48,8 @@ function SetupCustomGameModal({ visible, setVisible, onSetupEnd }) {
         if (success) {
             setPlayerLists(storage.getPlayerLists());
             toast({
-                title: 'Lista guardada',
-                description: 'La lista se ha guardado correctamente.',
+                title: t('createPlayerList.toast.success.title'),
+                description: t('createPlayerList.toast.success.description'),
                 status: 'success',
                 duration: 2000,
                 isClosable: true,
@@ -55,8 +57,8 @@ function SetupCustomGameModal({ visible, setVisible, onSetupEnd }) {
         }
         else {
             toast({
-                title: 'Error',
-                description: 'La lista de jugadores que has creado ya existe.',
+                title: t('createPlayerList.toast.error.title'),
+                description: t('createPlayerList.toast.error.existDescription'),
                 status: 'error',
                 duration: 2000,
                 isClosable: true,
@@ -109,11 +111,11 @@ function SetupCustomGameModal({ visible, setVisible, onSetupEnd }) {
     const nextStepLabel = () => {
         switch (activeStep) {
             case 0:
-                return 'Crear lista';
+                return t('button.createList');
             case 2:
-                return 'Empezar';
+                return t('button.start');
             default:
-                return 'Continuar';
+                return t('button.continue');
         }
     }
 
@@ -123,7 +125,7 @@ function SetupCustomGameModal({ visible, setVisible, onSetupEnd }) {
             <Modal size={width > 600 ? 'lg' : 'full'} isOpen={visible} onClose={exitSetup} initialFocusRef={initialRef} scrollBehavior='inside'>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Crear partida customizada</ModalHeader>
+                    <ModalHeader>{t('createCustomGame.header')}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Stepper index={activeStep} gap='0'>
@@ -147,7 +149,7 @@ function SetupCustomGameModal({ visible, setVisible, onSetupEnd }) {
                     <ModalFooter flexDirection='column' alignItems='stretch' boxShadow='2xl'>
                         <Stack>
                             <Button colorScheme='twitter' variant='outline' onClick={previousButton}>
-                                Atrás
+                                {t('button.back')}
                             </Button>
                             <Button colorScheme='twitter' onClick={nextButton}>
                                 {nextStepLabel()}

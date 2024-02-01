@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+import parse from 'html-react-parser';
 import PresetCard from '../components/PresetCard';
 import { useGameContext } from '../context/GameContext';
 import { Alert, AlertIcon, Stack, Text, Collapse, FormLabel, Switch, HStack } from '@chakra-ui/react'
@@ -5,6 +7,7 @@ import { Alert, AlertIcon, Stack, Text, Collapse, FormLabel, Switch, HStack } fr
 import { PRESETS } from '../utils/presets.js';
 
 function SelectPreset({ onSelectPreset }) {
+    const { t } = useTranslation('global');
     const { setNumRounds, setTricksPerRound, strictMode, setStrictMode } = useGameContext();
 
     const handlePresetCardClick = (preset) => {
@@ -24,12 +27,10 @@ function SelectPreset({ onSelectPreset }) {
     return (
         <>
             <Stack spacing='3'>
-                <Text fontSize='md'>
-                    Elige tu <b>modo de juego</b> preferido o personaliza uno a tu medida. Cada opción ofrece una experiencia única y adaptada a tu estilo de juego.
-                </Text>
+                <Text fontSize='md'>{parse(t('chooseYourGameMode'))}</Text>
                 <HStack justifyContent='space-between'>
                     <FormLabel htmlFor='strict-mode' mb='0' textAlign='right'>
-                        Activar modo estricto
+                        {t('strictMode.title')}
                     </FormLabel>
                     <Switch size='lg' id='strict-mode' isChecked={strictMode} onChange={handleSwitchStrictMode} />
                 </HStack>
@@ -37,7 +38,7 @@ function SelectPreset({ onSelectPreset }) {
             <Collapse in={strictMode} animateOpacity >
                 <Alert status='info' mt='3'>
                     <AlertIcon />
-                    <Text>En <b>modo estricto</b>, la app asegura que las cartas en mano igualen las rondas ganadas totales.</Text>
+                    <Text>{parse(t('strictMode.description'))}</Text>
                 </Alert>
             </Collapse>
             <Stack spacing='3' mt='3'>

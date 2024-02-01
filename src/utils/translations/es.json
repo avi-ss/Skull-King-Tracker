@@ -1,0 +1,170 @@
+{
+    "gameMode": {
+        "original": {
+            "name": "Original",
+            "description": "El juego original, una ronda de 1, 2, 3, 4, 5, 6, 7, 8, 9 y 10 cartas por mano."
+        },
+        "coupleKeel": {
+            "name": "Quilla Pareja",
+            "description": "Dos rondas de 2, 4, 6, 8, y 10 cartas por mano."
+        },
+        "avoidTheFight": {
+            "name": "Evitar la Pelea",
+            "description": "Una ronda de 6, 7, 8, 9, y 10 cartas por mano."
+        },
+        "quickAndSaltySkirmish": {
+            "name": "Escaramuza Rápida y Salada",
+            "description": "Cinco ronda de 5 cartas por mano."
+        },
+        "gunwalePlank": {
+            "name": "Tablón de Borda",
+            "description": "Diez rondas de 10 cartas por mano."
+        },
+        "hurricane": {
+            "name": "Huracán",
+            "description": "Dos rondas de 9, 7, 5, 3 y 1 carta por mano."
+        },
+        "afterBedtime": {
+            "name": "Tras la Hora de Dormir",
+            "description": "Una ronda de 1 carta por mano más un abrazo de buenas noches."
+        },
+        "custom": {
+            "name": "Customizado",
+            "description": "¡Tú eliges el número de rondas y las cartas por mano!"
+        }
+    },
+    "gameSpeed": {
+        "normal": "Normal",
+        "mediumSlow": "Medio-Lento",
+        "medium": "Medio",
+        "fast": "Rápido",
+        "verySlow": "Muy Lento",
+        "variable": "Variable",
+        "veryFast": "Muy Rápido"
+    },
+    "chooseYourGameMode": "Elige tu <b>modo de juego</b> preferido o personaliza uno a tu medida. Cada opción ofrece una experiencia única y adaptada a tu estilo de juego.",
+    "strictMode": {
+        "title": "Activar modo estricto",
+        "description": "En <b>modo estricto</b>, la app asegura que las cartas en mano igualen las rondas ganadas totales."
+    },
+    "button": {
+        "select": "Seleccionar",
+        "delete": "Eliminar",
+        "back": "Atrás",
+        "createList": "Crear lista",
+        "addPlayer": "Añadir jugador",
+        "deletePlayer": "Quitar jugador",
+        "close": "Cerrar",
+        "create": "Crear",
+        "continue": "Continuar",
+        "start": "Empezar",
+        "finish": "Finalizar",
+        "next": "Siguiente",
+        "exit": "Salir",
+        "cancel": "Cancelar",
+        "backToMenu": "Volver al menú",
+        "kraken": "Kraken"
+    },
+    "selectPlayerList": {
+        "noPlayerLists": "Actualmente no tienes ninguna lista guardada.",
+        "header": "Selecciona una lista de jugadores",
+        "description": "Selecciona una lista creada anteriormente o crea una nueva.",
+        "toast": {
+            "title": "Lista eliminada",
+            "description": "Se ha eliminado la lista correctamente."
+        }
+    },
+    "createPlayerList": {
+        "description": "Introduce el nombre de los jugadores que van a jugar la partida.",
+        "modal": {
+            "header": "Crea una lista de jugadores"
+        },
+        "toast": {
+            "error": {
+                "title": "Error al guardar lista",
+                "existDescription": "La lista de jugadores que has creado ya existe.",
+                "uniqueDescription": "Por favor, asegúrate de que todos los jugadores tengan un nombre único y no estén vacíos.",
+                "minPlayerDescription": "Por favor, asegúrate de que haya como mínimo 2 jugadores."
+            },
+            "success": {
+                "title": "Lista guardada",
+                "description": "La lista se ha guardado correctamente."
+            }
+        }
+    },
+    "setupRounds": {
+        "description": "Introduce el número de rondas que va a durar la partida."
+    },
+    "setupTricks": {
+        "description": "Introduce el número de cartas por mano para cada una de las rondas de la partida.",
+        "round": "Ronda"
+    },
+    "createCustomGame": {
+        "header": "Crear partida customizada"
+    },
+    "createPresetGame": {
+        "header": "Crear partida"
+    },
+    "game": {
+        "toast": {
+            "info": {
+                "title": "Reseteo de valores",
+                "description": "Se han reseteado los valores de {{name}}."
+            },
+            "success": {
+                "title": "Siguiente ronda",
+                "titleBack": "Anterior ronda",
+                "description": "Se ha actualizado correctamente la tabla de puntuaciones."
+            },
+            "error": {
+                "title": "Modo estricto",
+                "description": "No se pueden ganar {{won}} manos en una ronda de {{played}} cartas."
+            }
+        },
+        "playerCard": {
+            "badges": {
+                "pirate": {
+                    "singular": "Pirata",
+                    "plural": "Piratas"
+                },
+                "mermaid": {
+                    "singular": "Sirena",
+                    "plural": "Sirenas"
+                },
+                "skullKing": "Skull K",
+                "points": "Puntos"
+            },
+            "input": {
+                "bid": "Apuesta",
+                "result": "Resultado",
+                "bonus": "Bonus"
+            }
+        },
+        "leaderboard": {
+            "button": "Ver puntuaciones",
+            "header": "Tabla de clasificación",
+            "position": "Puesto",
+            "player": "Jugador",
+            "points": "Puntos"
+        },
+        "krakenAlert": {
+            "header": "Aviso de Kraken",
+            "description": "En esta ronda ha habido <b>{{diff}} ronda(s)</b> jugada(s) que nadie ha ganado. Por favor, comprueba que los resultados están bien."
+        },
+        "exitAlert": {
+            "header": "Salir de la partida",
+            "description": "¿Estás seguro de que quieres salir de la partida? Volverás al menú de selección."
+        },
+        "backAlert": {
+            "header": "Aviso de progreso",
+            "description": "¿Estás seguro de que quieres volver atrás? Esto eliminará el progreso de la última ronda jugada."
+        },
+        "content": {
+            "currentRound": "Ronda {{current}} de {{total}}",
+            "trick": {
+                "singular": "baza",
+                "plural": "bazas"
+            }
+        }
+    }
+}

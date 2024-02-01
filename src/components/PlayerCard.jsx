@@ -1,7 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import RoundInput from '../components/RoundInput';
-import { Avatar, Badge, ButtonGroup, IconButton, Button, Card, CardHeader, CardBody, Heading, Tag, Text, Stack, HStack, Collapse, useColorMode} from '@chakra-ui/react';
+import { Avatar, Badge, ButtonGroup, IconButton, Button, Card, CardHeader, CardBody, Heading, Tag, Text, Stack, HStack, Collapse, useColorMode } from '@chakra-ui/react';
 import { GiPirateCaptain, GiPirateFlag, GiMermaid, GiOpenTreasureChest } from "react-icons/gi";
 import { RepeatIcon } from '@chakra-ui/icons';
 
@@ -9,6 +10,7 @@ const ICON_SIZE = '26px';
 
 function PlayerCard({ name, index, points, palette, currentResults, maxTricks, onChangeBid, onChangeResults, onCaptureSkullKing, onCapturePirate, onCaptureMermaid, onGetAdditionalPoints, onResetScore }) {
     const { colorMode } = useColorMode();
+    const { t } = useTranslation('global');
 
     const hasSpecialBadges = () => {
         const {
@@ -30,16 +32,16 @@ function PlayerCard({ name, index, points, palette, currentResults, maxTricks, o
         const badges = [];
 
         if (pirate > 0) {
-            badges.push(<Badge key="pirate" colorScheme="red">{pirate === 1 ? 'Pirata' : `${pirate} Piratas`}</Badge>);
+            badges.push(<Badge key="pirate" colorScheme="red">{pirate === 1 ?  t('game.playerCard.badges.pirate.singular') : `${pirate} ${t('game.playerCard.badges.pirate.plural')}`}</Badge>);
         }
         if (mermaid > 0) {
-            badges.push(<Badge key="mermaid" colorScheme="teal">{mermaid === 1 ? 'Sirena' : `${mermaid} Sirenas`}</Badge>);
+            badges.push(<Badge key="mermaid" colorScheme="teal">{mermaid === 1 ?  t('game.playerCard.badges.mermaid.singular') : `${mermaid} ${t('game.playerCard.badges.mermaid.plural')}`}</Badge>);
         }
         if (skullKing > 0) {
-            badges.push(<Badge key="skullKing" colorScheme="blue">{skullKing === 1 ? 'SKULL K' : `${skullKing} SKULL K`}</Badge>);
+            badges.push(<Badge key="skullKing" colorScheme="blue">{skullKing} {t('game.playerCard.badges.skullKing')}</Badge>);
         }
         if (Math.abs(additionalPoints) > 0) {
-            badges.push(<Badge key="points" colorScheme="purple" variant={additionalPoints < 0 ? 'outline' : 'subtle'}>{additionalPoints} puntos</Badge>);
+            badges.push(<Badge key="points" colorScheme="purple" variant={additionalPoints < 0 ? 'outline' : 'subtle'}>{additionalPoints} {t('game.playerCard.badges.points')}</Badge>);
         }
 
         return <HStack mt='3'>{badges}</HStack>;
@@ -65,15 +67,15 @@ function PlayerCard({ name, index, points, palette, currentResults, maxTricks, o
             <CardBody>
                 <Stack spacing={3}>
                     <Stack spacing={1}>
-                        <Text fontSize="md" fontWeight='600'>Apuesta</Text>
+                        <Text fontSize="md" fontWeight='600'>{t('game.playerCard.input.bid')}</Text>
                         <RoundInput name={name} scheme={palette?.scheme} index={index} value={currentResults?.bid || 0} defaultValue={0} min={0} max={maxTricks} onChange={onChangeBid} ></RoundInput>
                     </Stack>
                     <Stack spacing={1}>
-                        <Text fontSize="md" fontWeight='600'>Resultado</Text>
+                        <Text fontSize="md" fontWeight='600'>{t('game.playerCard.input.result')}</Text>
                         <RoundInput name={name} scheme={palette?.scheme} index={index} value={currentResults?.result || 0} defaultValue={0} min={0} max={maxTricks} onChange={onChangeResults} ></RoundInput>
                     </Stack>
                     <Stack spacing={1}>
-                        <Text fontSize="md" fontWeight='600'>Bonus</Text>
+                        <Text fontSize="md" fontWeight='600'>{t('game.playerCard.input.bonus')}</Text>
                         <HStack justifyContent='space-between'>
                             <ButtonGroup size='md' isAttached>
                                 <IconButton isDisabled={(currentResults?.bid || 0) === 0} colorScheme='facebook' fontSize={ICON_SIZE} icon={<GiPirateCaptain />} onClick={onCaptureSkullKing(index)}></IconButton>

@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input, Button, Text, Stack, SimpleGrid } from '@chakra-ui/react';
 import { useGameContext } from '../../context/GameContext';
 
-function SetupPlayers({ initialRef }) {
+function CreatePlayerList({ initialRef }) {
     const { playerNames, setPlayerNames } = useGameContext();
+    const { t } = useTranslation('global');
     const inputRefs = useRef([initialRef]);
 
     useEffect(() => {
@@ -56,16 +58,16 @@ function SetupPlayers({ initialRef }) {
     return (
         <Stack spacing={3}>
             <Text mb='2'>
-                Introduce el nombre de los jugadores que van a jugar la partida.
+                {t('createPlayerList.description')}
             </Text>
             {renderInputs()}
             <Stack>
                 <SimpleGrid mt='2' columns={2} spacing={4}>
                     <Button colorScheme='red' onClick={removePlayer} >
-                        Quitar jugador
+                        {t('button.deletePlayer')}
                     </Button>
                     <Button colorScheme='green' onClick={addPlayer}>
-                        Añadir jugador
+                        {t('button.addPlayer')}
                     </Button>
                 </SimpleGrid>
             </Stack>
@@ -73,4 +75,4 @@ function SetupPlayers({ initialRef }) {
     );
 }
 
-export default SetupPlayers;
+export default CreatePlayerList;

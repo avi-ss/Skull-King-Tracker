@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Button,
     Stack,
@@ -20,6 +21,7 @@ import storage from '../utils/storage';
 function SetupPresetGameModal({ visible, setVisible, onSetupEnd }) {
     const { playerNames, setPlayerNames, setPlayerLists, width } = useGameContext();
     const [isCreatingList, setCreatingList] = useState(false);
+    const { t } = useTranslation('global');
     const initialRef = React.useRef(null)
 
     const selectPlayerList = (playerList) => {
@@ -34,8 +36,8 @@ function SetupPresetGameModal({ visible, setVisible, onSetupEnd }) {
         if (success) {
             setPlayerLists(storage.getPlayerLists());
             toast({
-                title: 'Lista guardada',
-                description: 'La lista se ha guardado correctamente.',
+                title: t('createPlayerList.toast.success.title'),
+                description: t('createPlayerList.toast.success.description'),
                 status: 'success',
                 duration: 2000,
                 isClosable: true,
@@ -43,8 +45,8 @@ function SetupPresetGameModal({ visible, setVisible, onSetupEnd }) {
         }
         else {
             toast({
-                title: 'Error',
-                description: 'La lista de jugadores que has creado ya existe.',
+                title: t('createPlayerList.toast.error.title'),
+                description: t('createPlayerList.toast.error.existDescription'),
                 status: 'error',
                 duration: 2000,
                 isClosable: true,
@@ -63,7 +65,7 @@ function SetupPresetGameModal({ visible, setVisible, onSetupEnd }) {
             <Modal size={width > 600 ? 'lg' : 'full'} isOpen={visible} onClose={() => setVisible(false)} initialFocusRef={initialRef} scrollBehavior='inside'>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Crear partida</ModalHeader>
+                    <ModalHeader>{t('createPresetGame.header')}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <SelectPlayerList onSelectList={selectPlayerList} />
@@ -71,10 +73,10 @@ function SetupPresetGameModal({ visible, setVisible, onSetupEnd }) {
                     <ModalFooter flexDirection='column' alignItems='stretch' boxShadow='2xl'>
                         <Stack>
                             <Button colorScheme='twitter' variant='outline' onClick={() => setVisible(false)}>
-                                Atrás
+                                {t('button.back')}
                             </Button>
                             <Button colorScheme='twitter' onClick={nextButton}>
-                                Crear lista
+                                {t('button.createList')}
                             </Button>
                         </Stack>
                     </ModalFooter>

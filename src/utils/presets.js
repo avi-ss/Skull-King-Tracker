@@ -1,70 +1,70 @@
 const DEFAULT = {
-    name: 'Original',
-    description: 'El juego original, una ronda de 1, 2, 3, 4, 5, 6, 7, 8, 9 y 10 cartas por mano.',
+    name: 'gameMode.original.name',
+    description: 'gameMode.original.description',
     rounds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    gameSpeed: 'Normal',
+    gameSpeed: 'gameSpeed.normal',
     color: 'yellow',
     custom: false,
 }
 
 const COUPLE_KEEL = {
-    name: 'Quilla Pareja',
-    description: 'Dos rondas de 2, 4, 6, 8, y 10 cartas por mano.',
+    name: 'gameMode.coupleKeel.name',
+    description: 'gameMode.coupleKeel.description',
     rounds: [2, 2, 4, 4, 6, 6, 8, 8, 10, 10],
-    gameSpeed: 'Medio-Lento',
+    gameSpeed: 'gameSpeed.mediumSlow',
     color: 'orange',
     custom: false,
 }
 
 const AVOID_THE_FIGHT = {
-    name: 'Evitar la Pelea',
-    description: 'Una ronda de 6, 7, 8, 9, y 10 cartas por mano.',
+    name: 'gameMode.avoidTheFight.name',
+    description: 'gameMode.avoidTheFight.description',
     rounds: [6, 7, 8, 9, 10],
-    gameSpeed: 'Medio',
+    gameSpeed: 'gameSpeed.medium',
     color: 'yellow',
     custom: false,
 }
 
 const QUICK_AND_SALTY_SKIRMISH = {
-    name: 'Escaramuza Rápida y Salada',
-    description: 'Cinco ronda de 5 cartas por mano.',
+    name: 'gameMode.quickAndSaltySkirmish.name',
+    description: 'gameMode.quickAndSaltySkirmish.description',
     rounds: [5, 5, 5, 5, 5],
-    gameSpeed: 'Rápido',
+    gameSpeed: 'gameSpeed.fast',
     color: 'red',
     custom: false,
 }
 
 const GUNWALE_PLANK = {
-    name: 'Tablón de Borda',
-    description: 'Diez rondas de 10 cartas por mano.',
+    name: 'gameMode.gunwalePlank.name',
+    description: 'gameMode.gunwalePlank.description',
     rounds: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-    gameSpeed: 'Muy Lento',
+    gameSpeed: 'gameSpeed.verySlow',
     color: 'blue',
     custom: false,
 }
 
 const HURRICANE = {
-    name: 'Huracán',
-    description: 'Dos rondas de 9, 7, 5, 3 y 1 carta por mano.',
+    name: 'gameMode.hurricane.name',
+    description: 'gameMode.hurricane.description',
     rounds: [9, 9, 7, 7, 5, 5, 3, 3, 1, 1],
-    gameSpeed: 'Variable',
+    gameSpeed: 'gameSpeed.variable',
     color: 'green',
     custom: false,
 }
 
 const AFTER_BEDTIME = {
-    name: 'Tras la Hora de Dormir',
-    description: 'Una ronda de 1 carta por mano más un abrazo de buenas noches.',
+    name: 'gameMode.afterBedtime.name',
+    description: 'gameMode.afterBedtime.description',
     rounds: [1],
-    gameSpeed: 'Muy Rápido',
+    gameSpeed: 'gameSpeed.veryFast',
     color: 'red',
     custom: false,
 }
 
 const CUSTOM = {
-    name: 'Customizado',
-    description: '¡Tú eliges el numero de rondas y las cartas por mano!',
-    gameSpeed: 'Variable',
+    name: 'gameMode.custom.name',
+    description: 'gameMode.custom.description',
+    gameSpeed: 'gameSpeed.variable',
     color: 'green',
     custom: true,
 }

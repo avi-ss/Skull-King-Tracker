@@ -1,0 +1,170 @@
+{
+    "gameMode": {
+        "original": {
+            "name": "Original",
+            "description": "The original game, a round of 1, 2, 3, 4, 5, 6, 7, 8, 9, and 10 cards per hand."
+        },
+        "coupleKeel": {
+            "name": "Couple Keel",
+            "description": "Two rounds of 2, 4, 6, 8, and 10 cards per hand."
+        },
+        "avoidTheFight": {
+            "name": "Avoid the Fight",
+            "description": "A round of 6, 7, 8, 9, and 10 cards per hand."
+        },
+        "quickAndSaltySkirmish": {
+            "name": "Quick and Salty Skirmish",
+            "description": "Five rounds of 5 cards per hand."
+        },
+        "gunwalePlank": {
+            "name": "Gunwale Plank",
+            "description": "Ten rounds of 10 cards per hand."
+        },
+        "hurricane": {
+            "name": "Hurricane",
+            "description": "Two rounds of 9, 7, 5, 3, and 1 card per hand."
+        },
+        "afterBedtime": {
+            "name": "After Bedtime",
+            "description": "A round of 1 card per hand plus a goodnight hug."
+        },
+        "custom": {
+            "name": "Custom",
+            "description": "You choose the number of rounds and cards per hand!"
+        }
+    },
+    "gameSpeed": {
+        "normal": "Normal",
+        "mediumSlow": "Medium-Slow",
+        "medium": "Medium",
+        "fast": "Fast",
+        "verySlow": "Very Slow",
+        "variable": "Variable",
+        "veryFast": "Very Fast"
+    },
+    "chooseYourGameMode": "Choose your preferred <b>game mode</b> or customize one to suit you. Each option offers a unique experience adapted to your playing style.",
+    "strictMode": {
+        "title": "Enable strict mode",
+        "description": "In <b>strict mode</b>, the app ensures that the cards in hand equal the total rounds won."
+    },
+    "button": {
+        "select": "Select",
+        "delete": "Delete",
+        "back": "Back",
+        "createList": "Create list",
+        "addPlayer": "Add player",
+        "deletePlayer": "Remove player",
+        "close": "Close",
+        "create": "Create",
+        "continue": "Continue",
+        "start": "Start",
+        "finish": "Finish",
+        "next": "Next",
+        "exit": "Exit",
+        "cancel": "Cancel",
+        "backToMenu": "Back to menu",
+        "kraken": "Kraken"
+    },
+    "selectPlayerList": {
+        "noPlayerLists": "You currently have no saved lists.",
+        "header": "Select a list of players",
+        "description": "Select a previously created list or create a new one.",
+        "toast": {
+            "title": "Deleted list",
+            "description": "The list has been deleted successfully."
+        }
+    },
+    "createPlayerList": {
+        "description": "Enter the name of the players who are going to play the game.",
+        "modal": {
+            "header": "Create a list of players"
+        },
+        "toast": {
+            "error": {
+                "title": "Error saving list",
+                "existDescription": "The player list you created already exists.",
+                "uniqueDescription": "Please make sure all players have a unique name and are not empty.",
+                "minPlayerDescription": "Please make sure there are at least 2 players."
+            },
+            "success": {
+                "title": "Saved list",
+                "description": "The list has been saved successfully."
+            }
+        }
+    },
+    "setupRounds": {
+        "description": "Enter the number of rounds the game will last."
+    },
+    "setupTricks": {
+        "description": "Enter the number of cards per hand for each round of the game.",
+        "round": "Round"
+    },
+    "createCustomGame": {
+        "header": "Create custom game"
+    },
+    "createPresetGame": {
+        "header": "Create game"
+    },
+    "game": {
+        "toast": {
+            "info": {
+                "title": "Reset values",
+                "description": "The values of {{name}} have been reset."
+            },
+            "success": {
+                "title": "Next round",
+                "titleBack": "Previous round",
+                "description": "The scoreboard has been successfully updated."
+            },
+            "error": {
+                "title": "Strict mode",
+                "description": "You cannot win {{won}} hands in a round of {{played}} cards."
+            }
+        },
+        "playerCard": {
+            "badges": {
+                "pirate": {
+                    "singular": "Pirate",
+                    "plural": "Pirates"
+                },
+                "mermaid": {
+                    "singular": "Mermaid",
+                    "plural": "Mermaids"
+                },
+                "skullKing": "Skull K",
+                "points": "Points"
+            },
+            "input": {
+                "bid": "Bet",
+                "result": "Result",
+                "bonus": "Bonus"
+            }
+        },
+        "leaderboard": {
+            "button": "Open leaderboard",
+            "header": "Leaderboard",
+            "position": "Position",
+            "player": "Player",
+            "points": "Points"
+        },
+        "krakenAlert": {
+            "header": "Kraken Notice",
+            "description": "In this round there have been <b>{{diff}} round(s)</b> played that no one has won. Please check that the results are correct."
+        },
+        "exitAlert": {
+            "header": "Exit the game",
+            "description": "Are you sure you want to exit the game? You will be returned to the selection menu."
+        },
+        "backAlert": {
+            "header": "Progress notice",
+            "description": "Are you sure you want to go back? This will delete the progress from the last round played."
+        },
+        "content": {
+            "currentRound": "Round {{current}} of {{total}}",
+            "trick": {
+                "singular": "trick",
+                "plural": "tricks"
+            }
+        }
+    }
+}

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useGameContext } from '../context/GameContext';
 import { Button, Heading, Tag, Stack, HStack, useToast, SimpleGrid, Wrap, WrapItem } from '@chakra-ui/react';
 import { InfoIcon } from '@chakra-ui/icons';
 import { GiKrakenTentacle } from 'react-icons/gi';
+import parse from 'html-react-parser'
 
 import {
     Modal,
@@ -38,6 +40,7 @@ import PlayerCard from '../components/PlayerCard';
 
 function Game({ onRoundChange, onGameExit }) {
     const { playerNames, tricksPerRound, numRounds, width, strictMode } = useGameContext();
+    const { t } = useTranslation('global');
     const [isLeaderboardOpen, setLeaderboardOpen] = useState(false);
     const [currentRound, setCurrentRound] = useState(0);
     const [palettes, setPalettes] = useState([]);
@@ -148,8 +151,8 @@ function Game({ onRoundChange, onGameExit }) {
             };
 
             toast({
-                title: 'Info',
-                description: `Se han reseteado los valores de ${playerNames[index]}.`,
+                title: t('game.toast.info.title'),
+                description: t('game.toast.info.description', { name: playerNames[index] }),
                 status: 'info',
                 duration: 1500,
                 isClosable: true,
@@ -195,8 +198,8 @@ function Game({ onRoundChange, onGameExit }) {
 
             if (roundsWonByPlayers > roundsPlayed) {
                 toast({
-                    title: 'Modo estricto',
-                    description: `No se pueden ganar ${roundsWonByPlayers} manos en una ronda de ${roundsPlayed} cartas.`,
+                    title: t('game.toast.error.title'),
+                    description: t('game.toast.error.description', { won: roundsWonByPlayers, played: roundsPlayed }),
                     status: 'error',
                     duration: 1500,
                     isClosable: true,
@@ -226,8 +229,8 @@ function Game({ onRoundChange, onGameExit }) {
                 return newFinalScores;
             });
             toast({
-                title: 'Siguiente ronda',
-                description: `Se ha actualizado correctamente la tabla de puntuaciones.`,
+                title: t('game.toast.success.title'),
+                description: t('game.toast.success.description'),
                 status: 'success',
                 duration: 1500,
                 isClosable: true,
@@ -265,8 +268,8 @@ function Game({ onRoundChange, onGameExit }) {
                     };
                 })
                 toast({
-                    title: 'Anterior ronda',
-                    description: `Se ha actualizado correctamente la tabla de puntuaciones.`,
+                    title: t('game.toast.success.titleBack'),
+                    description: t('game.toast.success.description'),
                     status: 'success',
                     duration: 1500,
                     isClosable: true,
@@ -304,16 +307,16 @@ function Game({ onRoundChange, onGameExit }) {
             <Modal size={width > 600 ? 'lg' : 'full'} isOpen={isLeaderboardOpen} onClose={() => setLeaderboardOpen(false)}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Tabla de clasificación</ModalHeader>
+                    <ModalHeader>{t('game.leaderboard.header')}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <TableContainer>
                             <Table variant='simple'>
                                 <Thead>
                                     <Tr>
-                                        <Th>Puesto</Th>
-                                        <Th>Jugador</Th>
-                                        <Th>Puntos</Th>
+                                        <Th>{t('game.leaderboard.position')}</Th>
+                                        <Th>{t('game.leaderboard.player')}</Th>
+                                        <Th>{t('game.leaderboard.points')}</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -335,9 +338,9 @@ function Game({ onRoundChange, onGameExit }) {
                     <ModalFooter flexDirection='column' alignItems='stretch'>
                         <Stack>
                             <Button colorScheme='blue' variant={isGameFinished ? 'outline' : 'solid'} onClick={() => setLeaderboardOpen(false)}>
-                                Cerrar
+                                {t('button.close')}
                             </Button>
-                            {isGameFinished && <Button colorScheme='blue' onClick={onGameExit}>Volver al menú</Button>}
+                            {isGameFinished && <Button colorScheme='blue' onClick={onGameExit}>{t('button.backToMenu')}</Button>}
                         </Stack>
                     </ModalFooter>
                 </ModalContent>
@@ -358,20 +361,20 @@ function Game({ onRoundChange, onGameExit }) {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Aviso de Kraken
+                            {t('game.krakenAlert.header')}
                         </AlertDialogHeader>
                         <AlertDialogBody>
-                            En esta ronda ha habido <b>{strictModeDiff}</b> ronda(s) jugada(s) que nadie ha ganado. Por favor, comprueba que los resultados están bien.
+                            {parse(t('game.krakenAlert.description', { diff: strictModeDiff }))}
                         </AlertDialogBody>
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={() => setStrictModeAlertOpen(false)}>
-                                Cancelar
+                                {t('button.cancel')}
                             </Button>
                             <Button colorScheme='red' rightIcon={<GiKrakenTentacle />} onClick={() => {
                                 setStrictModeAlertOpen(false);
                                 nextRound()
                             }} ml={3}>
-                                Kraken
+                                {t('button.kraken')}
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
@@ -393,20 +396,20 @@ function Game({ onRoundChange, onGameExit }) {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Salir de la partida
+                            {t('game.exitAlert.header')}
                         </AlertDialogHeader>
                         <AlertDialogBody>
-                            ¿Estás seguro de que quieres salir de la partida? Volverás al menú de selección.
+                            {t('game.exitAlert.description')}
                         </AlertDialogBody>
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={() => setExitGameAlertOpen(false)}>
-                                Cancelar
+                                {t('button.cancel')}
                             </Button>
                             <Button colorScheme='red' onClick={() => {
                                 setExitGameAlertOpen(false);
                                 onGameExit()
                             }} ml={3}>
-                                Salir
+                                {t('button.exit')}
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
@@ -427,19 +430,19 @@ function Game({ onRoundChange, onGameExit }) {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Aviso de progreso
+                            {t('game.backAlert.header')}
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
-                            ¿Estás seguro de que quieres volver atrás? Esto eliminará el progreso de la última ronda jugada.
+                            {t('game.backAlert.description')}
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={() => setPrevRoundAlertOpen(false)}>
-                                Cancelar
+                                {t('button.cancel')}
                             </Button>
                             <Button colorScheme='red' onClick={calculatePreviousRound} ml={3}>
-                                Confirmar
+                                {t('button.back')}
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
@@ -452,11 +455,11 @@ function Game({ onRoundChange, onGameExit }) {
         <>
             <Stack spacing='4'>
                 <Button size='md' leftIcon={<InfoIcon />} colorScheme='twitter' variant="outline" onClick={() => setLeaderboardOpen(true)}>
-                    Clasificación
+                    {t('game.leaderboard.button')}
                 </Button>
                 <HStack justifyContent='space-between'>
-                    <Heading as='h2' size='lg'>Ronda {currentRound + 1} de {numRounds}</Heading>
-                    <Tag size='lg' colorScheme='twitter'>{tricksPerRound[currentRound]} {tricksPerRound[currentRound] === 1 ? 'baza' : 'bazas'}</Tag>
+                    <Heading as='h2' size='lg'>{t('game.content.currentRound', { current: currentRound + 1, total: numRounds })}</Heading>
+                    <Tag size='lg' colorScheme='twitter'>{tricksPerRound[currentRound]} {tricksPerRound[currentRound] === 1 ? t('game.content.trick.singular') : t('game.content.trick.plural')}</Tag>
                 </HStack>
                 <Wrap justify='center'>
                     {renderPlayerCards()}
@@ -464,14 +467,14 @@ function Game({ onRoundChange, onGameExit }) {
                 <Stack>
                     <SimpleGrid columns={2} spacing={4}>
                         <Button colorScheme='red' variant="outline" onClick={() => setExitGameAlertOpen(true)}>
-                            Salir
+                            {t('button.exit')}
                         </Button>
                         <Button colorScheme='twitter' variant="outline" isDisabled={currentRound === 0 || isGameFinished} onClick={() => setPrevRoundAlertOpen(true)}>
-                            Atrás
+                            {t('button.back')}
                         </Button>
                     </SimpleGrid>
                     <Button colorScheme='twitter' onClick={checkNextRound}>
-                        {currentRound + 1 === numRounds ? 'Finalizar' : 'Siguiente'}
+                        {currentRound + 1 === numRounds ? t('button.finish') : t('button.next')}
                     </Button>
                 </Stack>
             </Stack>

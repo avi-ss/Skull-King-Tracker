@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, useToast, Stack } from '@chakra-ui/react';
 import {
     Modal,
@@ -11,20 +12,36 @@ import {
 } from '@chakra-ui/react'
 
 import { useGameContext } from '../context/GameContext';
-import SetupPlayers from './components/SetupPlayers';
-
-import checkPlayerNames from '../utils/control';
+import CreatePlayerList from './components/CreatePlayerList';
 
 function CreatePlayerListModal({ visible, setVisible, onSetupEnd }) {
     const { playerNames, width } = useGameContext();
+    const { t } = useTranslation('global');
     const toast = useToast();
     const initialRef = React.useRef(null)
 
     const checkInputs = () => {
-        const toastMessageError = checkPlayerNames(playerNames);
+        const playerNamesSet = new Set(playerNames);
+        const areAllNamesUnique = playerNamesSet.size === playerNames.length;
+        const areAllNamesFilled = playerNames.every((name) => name.trim() !== '');
 
-        if (toastMessageError) {
-            toast(toastMessageError);
+        if (!(areAllNamesFilled && areAllNamesUnique)) {
+            toast({
+                title: t('createPlayerList.toast.error.title'),
+                description: t('createPlayerList.toast.error.uniqueDescription'),
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+        else if (playerNames.length < 2) {
+            toast({
+                title: t('createPlayerList.toast.error.title'),
+                description: t('createPlayerList.toast.error.minPlayerDescription'),
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
         }
         else {
             setVisible(false);
@@ -36,18 +53,18 @@ function CreatePlayerListModal({ visible, setVisible, onSetupEnd }) {
         <Modal size={width > 600 ? 'lg' : 'full'} isOpen={visible} onClose={() => setVisible(false)} initialFocusRef={initialRef} scrollBehavior='inside'>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Crea una lista de jugadores</ModalHeader>
+                <ModalHeader>{t('createPlayerList.modal.header')}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <SetupPlayers initialRef={initialRef}/>
+                    <CreatePlayerList initialRef={initialRef} />
                 </ModalBody>
                 <ModalFooter flexDirection='column' alignItems='stretch'>
                     <Stack>
                         <Button colorScheme='twitter' variant='outline' onClick={() => setVisible(false)}>
-                            Cerrar
+                            {t('button.close')}
                         </Button>
                         <Button colorScheme='twitter' onClick={checkInputs}>
-                            Crear
+                            {t('button.create')}
                         </Button>
                     </Stack>
                 </ModalFooter>

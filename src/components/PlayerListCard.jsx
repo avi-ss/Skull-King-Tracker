@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { Button, Card, CardHeader, Tag, Text, CardFooter, HStack, SimpleGrid, useColorMode } from '@chakra-ui/react';
 
 function PlayerListCard({ index, scheme, playerNames, onSelect, onDelete }) {
+    const { t } = useTranslation('global');
     const { colorMode } = useColorMode();
 
     return (
@@ -14,10 +16,10 @@ function PlayerListCard({ index, scheme, playerNames, onSelect, onDelete }) {
             <CardFooter flexDirection='column'>
                 <SimpleGrid columns={2} spacing={4}>
                     <Button colorScheme={scheme} variant='outline' onClick={() => onDelete(playerNames)} >
-                        Eliminar
+                        {t('button.delete')}
                     </Button>
                     <Button colorScheme={scheme} onClick={() => onSelect(playerNames)}>
-                        Seleccionar
+                        {t('button.select')}
                     </Button>
                 </SimpleGrid>
             </CardFooter>

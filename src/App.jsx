@@ -1,29 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import SelectPreset from './pages/SelectPreset';
 import SetupPresetGameModal from './modals/SetupPresetGameModal';
 import SetupCustomGameModal from './modals/SetupCustomGameModal';
 import Game from './pages/Game';
-import { Box, HStack, Heading, IconButton, useColorMode } from '@chakra-ui/react';
+import { Box, Stack, HStack, Heading, IconButton, Select, useColorMode } from '@chakra-ui/react';
 import { useGameContext } from './context/GameContext';
-import { FaMoon, FaSun } from 'react-icons/fa';
+import { FaMoon, FaSun, FaGlobe } from 'react-icons/fa';
 import './App.css';
 
 function App() {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { i18n } = useTranslation('global');
   const [gameStarted, setGameStarted] = useState(false);
-  const [setupPlayersVisible, setSetupPlayerVisible] = useState(false);
-  const [setupGameVisible, setSetupGameVisible] = useState(false);
+  const [setupPresetVisible, setSetupPresetVisible] = useState(false);
+  const [setupCustomVisible, setSetupCustomVisible] = useState(false);
 
   const { setPlayerNames, setNumRounds, setTricksPerRound } = useGameContext();
 
   useEffect(() => {
-    if (!setupGameVisible && !setupPlayersVisible && !gameStarted) {
+    if (!setupCustomVisible && !setupPresetVisible && !gameStarted) {
       // Resetear a los valores iniciales
       setPlayerNames(['']);
       setNumRounds(1);
       setTricksPerRound([]);
     }
-  }, [setupPlayersVisible, setupGameVisible, gameStarted]);
+  }, [setupPresetVisible, setupCustomVisible, gameStarted]);
 
   const scrollToTop = () => {
     setTimeout(() => {
@@ -36,10 +38,10 @@ function App() {
 
   const handleSelectPreset = (isCustomPreset) => {
     if (isCustomPreset) {
-      setSetupGameVisible(true);
+      setSetupCustomVisible(true);
     }
     else {
-      setSetupPlayerVisible(true);
+      setSetupPresetVisible(true);
     }
   }
 
@@ -48,28 +50,38 @@ function App() {
     scrollToTop();
   }
 
+  const changeLanguage = (event) => {
+    i18n.changeLanguage(event.target.value);
+  };
+
   return (
     <div className='view'>
       <Box padding={6}>
-        <HStack mb='4' justifyContent='space-between'>
-          <Heading as='h1' size='xl'>Skull King Tracker</Heading>
-          <IconButton
-            aria-label='toggle theme'
-            colorScheme='facebook'
-            isRound={true}
-            variant='solid'
-            size='md'
-            onClick={toggleColorMode} 
-            icon={colorMode === 'dark' ? <FaSun /> : <FaMoon />}
-          />
-        </HStack>
+        <Stack mb='4'>
+          <HStack justifyContent='space-between'>
+            <Heading as='h1' size='xl'>Skull King Tracker</Heading>
+            <IconButton
+              aria-label='toggle theme'
+              colorScheme='facebook'
+              isRound={true}
+              variant='solid'
+              size='md'
+              onClick={toggleColorMode}
+              icon={colorMode === 'dark' ? <FaSun /> : <FaMoon />}
+            />
+          </HStack>
+          <Select mt="2" placeholder="Select language" onChange={changeLanguage} size="sm" variant="filled" icon={<FaGlobe />} value={i18n.language}>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </Select>
+        </Stack>
         {!gameStarted ?
           <SelectPreset onSelectPreset={handleSelectPreset} ></SelectPreset> :
           <Game onRoundChange={scrollToTop} onGameExit={() => handleStartGame(false)} />
         }
       </Box>
-      <SetupPresetGameModal visible={setupPlayersVisible} setVisible={setSetupPlayerVisible} onSetupEnd={() => handleStartGame(true)} />
-      <SetupCustomGameModal visible={setupGameVisible} setVisible={setSetupGameVisible} onSetupEnd={() => handleStartGame(true)} />
+      <SetupPresetGameModal visible={setupPresetVisible} setVisible={setSetupPresetVisible} onSetupEnd={() => handleStartGame(true)} />
+      <SetupCustomGameModal visible={setupCustomVisible} setVisible={setSetupCustomVisible} onSetupEnd={() => handleStartGame(true)} />
     </div>
   );
 }

@@ -3,11 +3,13 @@ import { Heading, Text, Stack, useToast, Alert, AlertDescription, AlertIcon } fr
 import PlayerListCard from '../../components/PlayerListCard';
 import { useGameContext } from '../../context/GameContext';
 
+import { useTranslation } from 'react-i18next';
 import { randomColors } from '../../utils/colors';
 import storage from '../../utils/storage';
 
 function SelectPlayerList({ onSelectList }) {
     const { playerLists, setPlayerLists } = useGameContext();
+    const { t } = useTranslation('global');
     const [colors, setColors] = useState([]);
     const toast = useToast();
 
@@ -34,8 +36,8 @@ function SelectPlayerList({ onSelectList }) {
                 localStorage.removeItem(key);
                 setPlayerLists(storage.getPlayerLists());
                 toast({
-                    title: 'Lista eliminada',
-                    description: 'Se ha eliminado la lista correctamente.',
+                    title: t('selectPlayerList.toast.title'),
+                    description: t('selectPlayerList.toast.description'),
                     status: 'info',
                     duration: 2000,
                     isClosable: true,
@@ -55,7 +57,7 @@ function SelectPlayerList({ onSelectList }) {
             return (
                 <Alert status='info'>
                     <AlertIcon />
-                    <AlertDescription>Actualmente no tienes ninguna lista guardada.</AlertDescription>
+                    <AlertDescription>{t('selectPlayerList.noPlayerLists')}</AlertDescription>
                 </Alert>
             )
         }
@@ -63,9 +65,9 @@ function SelectPlayerList({ onSelectList }) {
 
     return (
         <Stack spacing={3}>
-            <Heading as='h3' size='md'>Selecciona una lista de jugadores</Heading>
+            <Heading as='h3' size='md'>{t('selectPlayerList.header')}</Heading>
             <Text>
-                Selecciona una lista creada anteriormente o crea una nueva.
+                {t('selectPlayerList.description')}
             </Text>
             {renderPlayerLists()}
         </Stack>
