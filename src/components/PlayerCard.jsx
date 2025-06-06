@@ -32,13 +32,13 @@ function PlayerCard({ name, index, points, palette, currentResults, maxTricks, o
         const badges = [];
 
         if (pirate > 0) {
-            badges.push(<Badge key="pirate" colorScheme="red">{pirate === 1 ?  t('game.playerCard.badges.pirate.singular') : `${pirate} ${t('game.playerCard.badges.pirate.plural')}`}</Badge>);
+            badges.push(<Badge key="pirate" colorScheme="red" onClick={onCapturePirate(index, -1)} cursor="pointer" userSelect="none">{pirate === 1 ? t('game.playerCard.badges.pirate.singular') : `${pirate} ${t('game.playerCard.badges.pirate.plural')}`}</Badge>);
         }
         if (mermaid > 0) {
-            badges.push(<Badge key="mermaid" colorScheme="teal">{mermaid === 1 ?  t('game.playerCard.badges.mermaid.singular') : `${mermaid} ${t('game.playerCard.badges.mermaid.plural')}`}</Badge>);
+            badges.push(<Badge key="mermaid" colorScheme="teal" onClick={onCaptureMermaid(index, -1)} cursor="pointer" userSelect="none">{mermaid === 1 ? t('game.playerCard.badges.mermaid.singular') : `${mermaid} ${t('game.playerCard.badges.mermaid.plural')}`}</Badge>);
         }
         if (skullKing > 0) {
-            badges.push(<Badge key="skullKing" colorScheme="blue">{skullKing} {t('game.playerCard.badges.skullKing')}</Badge>);
+            badges.push(<Badge key="skullKing" colorScheme="blue" onClick={onCaptureSkullKing(index, -1)} cursor="pointer" userSelect="none">{skullKing} {t('game.playerCard.badges.skullKing')}</Badge>);
         }
         if (Math.abs(additionalPoints) > 0) {
             badges.push(<Badge key="points" colorScheme="purple" variant={additionalPoints < 0 ? 'outline' : 'subtle'}>{additionalPoints} {t('game.playerCard.badges.points')}</Badge>);

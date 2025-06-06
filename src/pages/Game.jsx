@@ -104,31 +104,31 @@ function Game({ onRoundChange, onGameExit }) {
         });
     };
 
-    const captureSkullKing = (index) => () => {
+    const captureSkullKing = (index, amount = 1) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
-            newScores[index].roundScores[currentRound].captured.skullKing += 1;
+            newScores[index].roundScores[currentRound].captured.skullKing += amount;
             return newScores;
         });
     }
 
-    const capturePirate = (index) => (_) => {
+    const capturePirate = (index, amount = 1) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
-            newScores[index].roundScores[currentRound].captured.pirate += 1;
+            newScores[index].roundScores[currentRound].captured.pirate += amount;
             return newScores;
         });
     }
 
-    const captureMermaid = (index) => (_) => {
+    const captureMermaid = (index, amount = 1) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
-            newScores[index].roundScores[currentRound].captured.mermaid += 1;
+            newScores[index].roundScores[currentRound].captured.mermaid += amount;
             return newScores;
         });
     }
 
-    const getAdditionalPoints = (index, points) => (_) => {
+    const getAdditionalPoints = (index, points) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
             newScores[index].roundScores[currentRound].additionalPoints += points;
@@ -136,7 +136,7 @@ function Game({ onRoundChange, onGameExit }) {
         });
     }
 
-    const resetCurrentScore = (index) => (_) => {
+    const resetCurrentScore = (index) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
             newScores[index].roundScores[currentRound] = {
