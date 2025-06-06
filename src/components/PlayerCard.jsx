@@ -84,7 +84,7 @@ function PlayerCard({ name, index, points, palette, currentResults, maxTricks, o
                                 <IconButton colorScheme='yellow' fontSize={ICON_SIZE} icon={<GiOpenTreasureChest />} onClick={onGetAdditionalPoints(index, 20)}></IconButton>
                             </ButtonGroup>
                             <ButtonGroup size='md' isAttached>
-                                <Button isDisabled={(currentResults?.bid || 0) === 0} colorScheme={palette?.scheme} onClick={onGetAdditionalPoints(index, 10)}>+10</Button>
+                                <Button colorScheme={palette?.scheme} onClick={onGetAdditionalPoints(index, 10)}>+10</Button>
                                 <Button colorScheme={palette?.scheme} variant="outline" onClick={onGetAdditionalPoints(index, -10)}>-10</Button>
                             </ButtonGroup>
                         </HStack>

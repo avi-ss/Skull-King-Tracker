@@ -175,16 +175,16 @@ function Game({ onRoundChange, onGameExit }) {
         const specialPoints = pirate * 30 + mermaid * 20 + skullKing * 40 + additionalPoints;
         const totalTricksPoints = tricksPerRound[currentRound] * 10;
 
-        let roundScore = 0;
+        let roundScore;
 
         if (bid === 0) {
-            roundScore = (result > 0) ? -totalTricksPoints : totalTricksPoints + specialPoints;
+            roundScore = (result > 0) ? -totalTricksPoints : totalTricksPoints;
         } else {
             const bidDifference = Math.abs(bid - result) * 10;
-            roundScore = (bid === result) ? bid * 20 + specialPoints : -bidDifference;
+            roundScore = (bid === result) ? bid * 20 : -bidDifference;
         }
 
-        return roundScore;
+        return roundScore + specialPoints;
     };
 
     const checkNextRound = () => {
