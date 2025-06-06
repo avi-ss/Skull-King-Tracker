@@ -47,7 +47,7 @@ function CreatePlayerList({ initialRef }) {
             <Input
                 key={index}
                 ref={!index ? initialRef : el => inputRefs.current[index] = el}
-                placeholder={`Jugador ${index + 1}`}
+                placeholder={t('createPlayerList.modal.placeholder', { position: index + 1 })}
                 value={name}
                 onChange={(event) => handleNameChange(event, index)}
                 isInvalid={isInputInvalid(index)}

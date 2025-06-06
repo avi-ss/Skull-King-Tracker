@@ -77,7 +77,8 @@
     "createPlayerList": {
         "description": "Enter the name of the players who are going to play the game.",
         "modal": {
-            "header": "Create a list of players"
+            "header": "Create a list of players",
+            "placeholder": "Player {{position}}"
         },
         "toast": {
             "error": {
