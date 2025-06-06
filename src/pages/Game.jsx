@@ -55,7 +55,8 @@ function Game({ onRoundChange, onGameExit }) {
     const toast = useToast();
 
     useEffect(() => {
-        const initialScores = playerNames.map(name => ({
+        const activeGame = JSON.parse(localStorage.getItem("active-game") || "null");
+        const initialScores = activeGame?.scores ?? playerNames.map(name => ({
             name,
             roundScores: Array.from({ length: numRounds }, () => ({
                 bid: 0,
@@ -69,10 +70,24 @@ function Game({ onRoundChange, onGameExit }) {
             })),
             totalScore: 0
         }));
-        const colorPalettes = randomColors(numRounds);
+        const colorPalettes = activeGame?.colors ?? randomColors(numRounds);
         setPalettes(colorPalettes);
         setPlayerScores(initialScores);
+        if(activeGame) {
+            setCurrentRound(activeGame.currentRound)
+        }
     }, [playerNames, numRounds]);
+
+    useEffect(() => {
+        localStorage.setItem("active-game", JSON.stringify({
+            playerNames,
+            numRounds,
+            tricksPerRound,
+            scores: playerScores,
+            colors: palettes,
+            currentRound,
+        }))
+    }, [playerNames, numRounds, tricksPerRound, playerScores, palettes, currentRound]);
 
     useEffect(() => {
         onRoundChange(); // Llamamos al padre
@@ -104,31 +119,31 @@ function Game({ onRoundChange, onGameExit }) {
         });
     };
 
-    const captureSkullKing = (index) => () => {
+    const captureSkullKing = (index, amount = 1) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
-            newScores[index].roundScores[currentRound].captured.skullKing += 1;
+            newScores[index].roundScores[currentRound].captured.skullKing += amount;
             return newScores;
         });
     }
 
-    const capturePirate = (index) => (_) => {
+    const capturePirate = (index, amount = 1) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
-            newScores[index].roundScores[currentRound].captured.pirate += 1;
+            newScores[index].roundScores[currentRound].captured.pirate += amount;
             return newScores;
         });
     }
 
-    const captureMermaid = (index) => (_) => {
+    const captureMermaid = (index, amount = 1) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
-            newScores[index].roundScores[currentRound].captured.mermaid += 1;
+            newScores[index].roundScores[currentRound].captured.mermaid += amount;
             return newScores;
         });
     }
 
-    const getAdditionalPoints = (index, points) => (_) => {
+    const getAdditionalPoints = (index, points) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
             newScores[index].roundScores[currentRound].additionalPoints += points;
@@ -136,7 +151,7 @@ function Game({ onRoundChange, onGameExit }) {
         });
     }
 
-    const resetCurrentScore = (index) => (_) => {
+    const resetCurrentScore = (index) => () => {
         setPlayerScores(prevScores => {
             const newScores = [...prevScores];
             newScores[index].roundScores[currentRound] = {
@@ -175,16 +190,16 @@ function Game({ onRoundChange, onGameExit }) {
         const specialPoints = pirate * 30 + mermaid * 20 + skullKing * 40 + additionalPoints;
         const totalTricksPoints = tricksPerRound[currentRound] * 10;
 
-        let roundScore = 0;
+        let roundScore;
 
         if (bid === 0) {
-            roundScore = (result > 0) ? -totalTricksPoints : totalTricksPoints + specialPoints;
+            roundScore = (result > 0) ? -totalTricksPoints : totalTricksPoints;
         } else {
             const bidDifference = Math.abs(bid - result) * 10;
-            roundScore = (bid === result) ? bid * 20 + specialPoints : -bidDifference;
+            roundScore = (bid === result) ? bid * 20 : -bidDifference;
         }
 
-        return roundScore;
+        return roundScore + specialPoints;
     };
 
     const checkNextRound = () => {

@@ -12,7 +12,8 @@ import './App.css';
 function App() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { i18n } = useTranslation('global');
-  const [gameStarted, setGameStarted] = useState(false);
+  const activeGame = localStorage.getItem("active-game");
+  const [gameStarted, setGameStarted] = useState(!!activeGame);
   const [setupPresetVisible, setSetupPresetVisible] = useState(false);
   const [setupCustomVisible, setSetupCustomVisible] = useState(false);
 
@@ -46,6 +47,9 @@ function App() {
   }
 
   const handleStartGame = (gameStarted) => {
+    if(!gameStarted) {
+      localStorage.removeItem("active-game");
+    }
     setGameStarted(gameStarted)
     scrollToTop();
   }
