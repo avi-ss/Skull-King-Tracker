@@ -55,7 +55,8 @@ function Game({ onRoundChange, onGameExit }) {
     const toast = useToast();
 
     useEffect(() => {
-        const initialScores = playerNames.map(name => ({
+        const activeGame = JSON.parse(localStorage.getItem("active-game") || "null");
+        const initialScores = activeGame?.scores ?? playerNames.map(name => ({
             name,
             roundScores: Array.from({ length: numRounds }, () => ({
                 bid: 0,
@@ -69,10 +70,24 @@ function Game({ onRoundChange, onGameExit }) {
             })),
             totalScore: 0
         }));
-        const colorPalettes = randomColors(numRounds);
+        const colorPalettes = activeGame?.colors ?? randomColors(numRounds);
         setPalettes(colorPalettes);
         setPlayerScores(initialScores);
+        if(activeGame) {
+            setCurrentRound(activeGame.currentRound)
+        }
     }, [playerNames, numRounds]);
+
+    useEffect(() => {
+        localStorage.setItem("active-game", JSON.stringify({
+            playerNames,
+            numRounds,
+            tricksPerRound,
+            scores: playerScores,
+            colors: palettes,
+            currentRound,
+        }))
+    }, [playerNames, numRounds, tricksPerRound, playerScores, palettes, currentRound]);
 
     useEffect(() => {
         onRoundChange(); // Llamamos al padre

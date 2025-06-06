@@ -6,10 +6,11 @@ const GameContext = createContext();
 export const useGameContext = () => useContext(GameContext);
 
 export const GameProvider = ({ children }) => {
-    const [playerNames, setPlayerNames] = useState(['']);
+    const activeGame = JSON.parse(localStorage.getItem("active-game") || "null");
+    const [playerNames, setPlayerNames] = useState(activeGame?.playerNames ?? ['']);
     const [playerLists, setPlayerLists] = useState([]);
-    const [numRounds, setNumRounds] = useState(1);
-    const [tricksPerRound, setTricksPerRound] = useState([]);
+    const [numRounds, setNumRounds] = useState(activeGame?.numRounds ?? 1);
+    const [tricksPerRound, setTricksPerRound] = useState(activeGame?.tricksPerRound ?? []);
 
     const [width, setWidth] = useState(window.innerWidth);
     const [strictMode, setStrictMode] = useState(false);
