@@ -23,9 +23,4 @@ npm install       # Install dependencies
 npm run dev       # Start local development server with Vite
 ```
 
-```bash
-npm run build     # Build the project for production
-npm run deploy    # Deploy to GitHub Pages
-```
-
 Feel free to contribute or suggest additional features. Your input is always welcome!
